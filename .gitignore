@@ -1,0 +1,41 @@
+# Directorios de compilación y archivos generados
+/build/
+/hot-deploy/*/build/
+/plugins/
+
+# Archivos de caché y logs
+.gradle/
+*.log
+/framework/entity/test.properties
+
+# Archivos de configuración de IDE (IntelliJ IDEA, Eclipse)
+.idea/
+.project
+.classpath
+.settings/
+.cache/
+*.iml
+*.iws
+*.ipr
+
+# Dependencias y artefactos de OFBiz
+/lib/
+/runtime/
+/test-data/
+/data/
+/images/
+/assets/
+
+# Archivos de configuración local
+/framework/catalina/conf/catalina.properties
+/framework/catalina/conf/server.xml
+/framework/catalina/conf/web.xml
+
+# Archivos de usuario y temporales
+*.swp
+*.bak
+*~
+
+# Archivos de empaquetado (WAR, JAR)
+*.war
+*.jar

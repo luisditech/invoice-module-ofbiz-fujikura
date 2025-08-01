@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<forms xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+        xmlns="http://ofbiz.apache.org/Widget-Form" xsi:schemaLocation="http://ofbiz.apache.org/Widget-Form http://ofbiz.apache.org/dtds/widget-form.xsd">
+
+   <!-- ************* -->
+    <!-- Configuration -->
+    <!-- ************* -->  
+
+    <!-- Create -->	
+	<form name="frmAddConfiguration" type="single" target="ctrlCreateConfiguration">
+	
+	    <!--<field name="cfgName" required-field="true"><text size="60"/></field> 
+	    <field name="cfgValue" required-field="true"><text size="255"/></field>
+	    <field name="cfgObs" required-field="true"><text size="255"/></field> 
+		-->
+		<!-- action="javascript: return confirm('Are you Sure do you want to continue ?');">  -->
+		<!--  action="javascript: return divFunction2();"> -->
+		
+		<auto-fields-service service-name="srvCreateConfiguration"/>
+								  	    
+        <field name="frmAddConfigurationSubmitButton" title="${uiLabelMap.CommonAdd}" event="onClick">         			                              
+        	<submit button-type="button"/>
+     	</field>
+    </form>
+    
+	<form name="frmAddConfigurationNoJava" type="single" target="ctrCreateConfigurationNoJava">	
+		<auto-fields-service service-name="srvNewConfigurationNoJava"/>								  	    
+        <field name="frmAddConfigurationNoJavaSubmitButton" title="${uiLabelMap.CommonAdd}" event="onClick">         			                              
+        	<submit button-type="button"/>
+     	</field>
+    </form>    
+    
+	<!-- Find -->
+	<form name="frmFindConfiguration" type="single" target="ctrlFindConfiguration" title="Find and list configuration"
+        header-row-style="header-row" default-table-style="basic-table">
+        <field name="noConditionFind"><hidden value="Y"/><!-- if this isn't there then with all fields empty no query will be done --></field>
+        <field name="cfgName"><text-find ignore-case="true"/></field>
+        <field name="cfgValue"><text-find ignore-case="true"/></field>
+        <field name="cfgObs"><text-find ignore-case="true"/></field> 
+        <field name="dummy"><text-find ignore-case="true"/></field>            
+        <!-- <field position="1" name="searchButton" title="${uiLabelMap.CommonFind}" widget-style="smallSubmit"><submit button-type="button"/></field>
+        -->
+        <!-- 
+        <field name="searchButton" title="${uiLabelMap.CommonFind}" event="onClick" action="javascript: return confirm('Are you Sure do you want to launch Service ?');">                        
+        	<submit button-type="button"/>
+     	</field>       
+     	-->     	      
+     	<!--   
+        <field name="user"><hidden value="${groovy:org.apache.ofbiz.base.util.UtilDateTime.getUser2(delegator)}"/></field> 	                         
+     	-->
+     	
+        <field name="searchButton" title="${uiLabelMap.CommonFind}" event="onClick" action="javascript: test('1','2');return false">                        
+        	<submit button-type="button"/>
+     	</field>     
+     	
+    </form>
+    
+    <form name="frmListConfiguration" type="list" separate-columns="true" title="Configuration List" list-name="listIt" target="" default-entity-name="EdiConfiguration" paginate-target="ctrlFindConfiguration"
+        odd-row-style="alternate-row" header-row-style="header-row-2" default-table-style="basic-table hover-bar">
+        <actions>
+            <set field="parameters.noConditionFind" value="Y"/>
+            <set field="parameters.sortField" from-field="parameters.sortField" default-value="cfgName"/> <!-- "-invoiceDate"/> -->
+            <service service-name="performFind" result-map="result" result-map-list="listIt">
+                <field-map field-name="inputFields" from-field="parameters"/>
+                <field-map field-name="entityName" value="EdiConfiguration"/>
+                <field-map field-name="orderBy" from-field="parameters.sortField"/>
+                <field-map field-name="viewIndex" from-field="viewIndex"/>
+                <field-map field-name="viewSize" from-field="viewSize"/>
+            </service>
+        </actions>
+        <field name="cfgName" widget-style="buttontext" sort-field="true">
+            <hyperlink description="${cfgId}" target="ctrlConfigurationOverview">
+                <parameter param-name="cfgId"/>
+            </hyperlink>
+        </field>        
+        <field name="cfgValue" sort-field="true"><display/></field>
+        <field name="cfgObs" sort-field="true"><display/></field>
+        <field name="deleteLink" title=" " widget-style="buttontext">
+            <hyperlink description="${uiLabelMap.CommonDeleteByJava}" target="ctrlDeleteConfiguration" also-hidden="false" confirmation-message="${uiLabelMap.EDIConfirmDelete}">
+                <parameter param-name="cfgId"/>
+            </hyperlink>
+        </field>
+        
+        <field name="deleteLinkNoJava" title=" " widget-style="buttontext">
+            <hyperlink description="${uiLabelMap.CommonDelete}" target="ctrlDeleteConfigurationNoJava" also-hidden="false" confirmation-message="${uiLabelMap.EDIConfirmDelete}">
+                <parameter param-name="cfgId"/>
+            </hyperlink>
+        </field>        
+    </form>    
+	  
+	<!-- Overview --> 
+    <form name="frmConfigurationOverview" type="single" target="ctrlDeleteConfiguration" title="Configuration Overview" default-map-name="ediConfiguration"
+        header-row-style="header-row" default-table-style="basic-table">
+        <field name="cfgName"><display/></field>        
+        <field name="cfgValue"><display/></field>
+        <field name="cfgObs"><display/></field>
+    </form>	
+    
+	<!-- Overview --> 
+    <form name="frmConfigurationOverviewNoJava" type="single" target="ctrlDeleteConfigurationNoJava" title="Configuration Overview" default-map-name="ediConfiguration"
+        header-row-style="header-row" default-table-style="basic-table">
+        <field name="cfgName"><display/></field>        
+        <field name="cfgValue"><display/></field>
+        <field name="cfgObs"><display/></field>
+    </form>	    
+    
+	<!-- Edit -->     
+    <form name="frmEditConfiguration" type="single" target="ctrlUpdateConfiguration" title="Edit Configuration" default-map-name="ediConfiguration"
+        header-row-style="header-row" default-table-style="basic-table">
+        <!-- <alt-target use-when="invoice==null" target="createInvoice"/> -->
+        <field name="cfgId"><display/></field>
+        <field name="cfgName"><display/></field>
+        <field name="cfgValue"><text size="25"/></field>   
+        <field name="cfgObs"><text size="100"/></field>                                              
+		<field name="updateButton" title="${uiLabelMap.CommonUpdate}" event="onClick" action="javascript: return confirm('Are you Sure do you want to continue ?');">                        
+        	<submit button-type="button"/>
+     	</field>                            
+    </form>      
+</forms>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+    <SecurityPermission description="View operations in the Invoice Component." permissionId="INVOICE_VIEW"/>
+    <SecurityPermission description="Create operations in the Invoice Component." permissionId="INVOICE_CREATE"/>
+    <SecurityPermission description="Update operations in the Invoice Component." permissionId="INVOICE_UPDATE"/>
+    <SecurityPermission description="Delete operations in the Invoice Component." permissionId="INVOICE_DELETE"/>
+    <SecurityPermission description="ALL operations in the Invoice Component." permissionId="INVOICE_ADMIN"/>
+
+    <SecurityGroupPermission groupId="SUPER" permissionId="INVOICE_ADMIN"/>
+</entity-engine-xml>

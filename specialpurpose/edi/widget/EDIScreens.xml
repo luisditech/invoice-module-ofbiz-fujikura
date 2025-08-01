@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://ofbiz.apache.org/Widget-Screen" xsi:schemaLocation="http://ofbiz.apache.org/Widget-Screen http://ofbiz.apache.org/dtds/widget-screen.xsd">
+
+    <screen name="main">
+        <section>
+            <actions>
+                <set field="headerItem" value="main"/><!-- this highlights the selected menu-item with name "main" -->
+            </actions>
+            <widgets>
+                <decorator-screen name="EDICommonDecorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="body">
+						<label text="Main Page!! :)"/>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Decorators -->
+    <screen name="CommonEDIDecorator">
+        <section>
+           <!--<actions>
+                <property-map resource="AccountingUiLabels" map-name="uiLabelMap" global="true"/>
+                <property-map resource="ProductUiLabels" map-name="uiLabelMap" global="true"/>                
+                <set field="headerItem" value="EDI"/>
+            </actions>-->
+            <widgets>
+                <decorator-screen name="main-decorator" location="${parameters.mainDecoratorLocation}">
+                    <decorator-section name="pre-body">
+                        <section>
+                            <!-- <condition>
+                                <if-service-permission service-name="acctgInvoicePermissionCheck" main-action="VIEW"/>
+                            </condition>-->
+                            <widgets>
+                                <!-- <include-menu name="InvoiceTabBar" location="component://accounting/widget/AccountingMenus.xml"/> -->
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                    <decorator-section name="body">
+                        <section>
+                            <!-- <condition>
+                                <if-service-permission service-name="acctgInvoicePermissionCheck" main-action="VIEW"/>
+                            </condition>-->
+                            <widgets>
+                                <section>
+                                    <condition><not><if-empty field="parameters.invoiceId"/></not></condition>
+                                    <widgets>
+                                        <!-- <include-menu name="InvoiceSubTabBar" location="component://accounting/widget/AccountingMenus.xml"/> -->
+                                        <container style="leftclear">
+                                            <label style="h1" text="${uiLabelMap[labelTitleProperty]} ${uiLabelMap.CommonFor}: ${invoice.description} [${invoiceId}]  ${${extraFunctionName}}"/>
+                                        </container>
+                                    </widgets>
+                                </section>
+                                <decorator-section-include name="body"/>
+                            </widgets>
+                            <fail-widgets>
+                                <label style="h3">${uiLabelMap.AccountingViewPermissionError}</label>
+                            </fail-widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>  
+
+   <!-- ************* -->
+    <!-- Configuration -->
+    <!-- ************* -->    
+
+    <screen name="scrNewConfiguration">
+        <section>
+            <actions>
+                <set field="headerItem" value="configuration"/><!-- this highlights the selected menu-item with name -->
+                <set field="layoutSettings.javaScripts[]" value="/EDI/static/scrNewConfiguration.js" global="true"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="EDICommonDecorator" location="component://EDI/widget/CommonScreens.xml"> <!-- "${parameters.mainDecoratorLocation}"> -->             
+                    <decorator-section name="body">
+                        <container style="h1"><label text="EDI Configuration:"/></container>
+                        <include-menu name="mConfigurationSearchTabBar" location="component://EDI/widget/EDIMenus.xml"/> 
+                        <include-form name="frmAddConfiguration" location="component://EDI/widget/EDIForms.xml"/>                    	
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>       
+    
+    <screen name="scrNewConfigurationNoJava">
+        <section>
+            <actions>
+                <set field="headerItem" value="configuration"/><!-- this highlights the selected menu-item with name -->
+                <set field="layoutSettings.javaScripts[]" value="/EDI/static/scrNewConfiguration.js" global="true"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="EDICommonDecorator" location="component://EDI/widget/CommonScreens.xml"> <!-- "${parameters.mainDecoratorLocation}"> -->             
+                    <decorator-section name="body">
+                        <container style="h1"><label text="EDI Configuration:"/></container>
+                        <include-menu name="mConfigurationSearchTabBar" location="component://EDI/widget/EDIMenus.xml"/> 
+                        <include-form name="frmAddConfigurationNoJava" location="component://EDI/widget/EDIForms.xml"/>                    	
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>     
+    
+    <screen name="scrFindConfiguration">
+        <section>
+            <actions>
+                <set field="headerItem" value="configuration"/><!-- this highlights the selected menu-item with name  -->
+                <!-- <set field="tabButtonItem" value="find"/> -->
+                <set field="titleProperty" value="PageTitleFindConfiguration"/>
+                <set field="layoutSettings.javaScripts[]" value="/EDI/static/scrFindConfiguration.js" global="true"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="CommonEDIDecorator" location="${parameters.invoiceDecoratorLocation}">
+                    <decorator-section name="body">
+                        <section>
+                            <widgets>
+                                <decorator-screen name="FindScreenDecorator" location="component://common/widget/CommonScreens.xml">
+                                    <decorator-section name="menu-bar">
+                                        <include-menu name="mConfigurationSubTabBar" location="component://EDI/widget/EDIMenus.xml"/>
+                                        <container style="clear"/>
+                                    </decorator-section>
+                                    <decorator-section name="search-options">
+                                        <include-form name="frmFindConfiguration" location="component://EDI/widget/EDIForms.xml"/>
+                                    </decorator-section>
+                                    
+                                    <decorator-section name="search-results">
+                                        <include-form name="frmListConfiguration"  location="component://EDI/widget/EDIForms.xml"/>
+                                    </decorator-section>
+                                                                        
+                                </decorator-screen>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>	    
+    
+	<!--  OVerview -->
+    <screen name="srcConfigurationOverview">
+        <section>
+            <actions>      
+                <set field="headerItem" value="configuration"/>          
+                <set field="titleProperty" value="PageTitleConfigurationOverview"/>
+                <!-- <set field="tabButtonItem" value="invoiceOverview"/> -->
+                <set field="cfgId" from-field="parameters.cfgId"/>
+                <entity-one entity-name="EdiConfiguration" value-field="ediConfiguration"/>                                
+            </actions>
+			<widgets>
+				<decorator-screen name="CommonEDIDecorator" location="${parameters.invoiceDecoratorLocation}">				
+					<decorator-section name="body">
+						<include-menu name="mConfigurationSearchTabBar" location="component://EDI/widget/EDIMenus.xml"/>						
+						
+						<include-form name="frmConfigurationOverview" location="component://EDI/widget/EDIForms.xml"/>
+						
+						<link target="crtlEditConfiguration" text="${uiLabelMap.CommonUpdate}" style="buttontext">
+							<parameter param-name="cfgId"/>
+						</link>		
+							
+																											 
+					</decorator-section>
+				</decorator-screen>
+			</widgets>				            
+        </section>
+    </screen>    
+    
+    <screen name="srcConfigurationOverviewNoJava">
+        <section>
+            <actions>      
+                <set field="headerItem" value="configuration"/>          
+                <set field="titleProperty" value="PageTitleConfigurationOverview"/>
+                <!-- <set field="tabButtonItem" value="invoiceOverview"/> -->
+                <set field="cfgId" from-field="parameters.cfgId"/>
+                <entity-one entity-name="EdiConfiguration" value-field="ediConfiguration"/>                                
+            </actions>
+			<widgets>
+				<decorator-screen name="CommonEDIDecorator" location="${parameters.invoiceDecoratorLocation}">				
+					<decorator-section name="body">
+						<include-menu name="mConfigurationSearchTabBar" location="component://EDI/widget/EDIMenus.xml"/>						
+						
+						<include-form name="frmConfigurationOverviewNoJava" location="component://EDI/widget/EDIForms.xml"/>
+						
+						<link target="crtlDeleteConfigurationNoJava" text="${uiLabelMap.CommonDelete}" style="buttontext">
+							<parameter param-name="cfgId"/>
+						</link>		
+							
+																											 
+					</decorator-section>
+				</decorator-screen>
+			</widgets>				            
+        </section>
+    </screen>      
+    
+    <!-- Edit -->
+    <screen name="srcEditConfiguration">                  
+        <section>
+            <actions>
+                <set field="headerItem" value="configuration"/> 
+                <set field="titleProperty" value="PageTitleEditConfiguration"/>
+                <!-- <set field="tabButtonItem" value="editInvoice"/> -->
+                <set field="cfgId" from-field="parameters.cfgId"/>
+                <entity-one entity-name="EdiConfiguration" value-field="ediConfiguration"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="CommonEDIDecorator" location="${parameters.invoiceDecoratorLocation}">
+                    <decorator-section name="body">                    
+                    	<include-menu name="mConfigurationSearchTabBar" location="component://EDI/widget/EDIMenus.xml"/>	                                                
+                        <section>                                                    
+                            <widgets>
+                                <screenlet title="${uiLabelMap.PageTitleEditConfiguration}">
+                                    <include-form name="frmEditConfiguration" location="component://EDI/widget/EDIForms.xml"/>
+                                </screenlet>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>    
+
+</screens>

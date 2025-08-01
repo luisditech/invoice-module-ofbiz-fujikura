@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://ofbiz.apache.org/Site-Conf" xsi:schemaLocation="http://ofbiz.apache.org/Site-Conf http://ofbiz.apache.org/dtds/site-conf.xsd">
+    <!-- The controller elements that are common to all OFBiz components
+         can be found in the following xml file. A component can override the
+         elements found in the common-controller.xml file. -->
+    <include location="component://common/webcommon/WEB-INF/common-controller.xml"/>
+
+    <description>EDI Component Site Configuration File</description>
+
+    <!-- Events to run on every request before security (chains exempt) -->
+    <!--
+    <preprocessor>
+    </preprocessor>
+    -->
+    <!-- Events to run on every request after all other processing (chains exempt) -->
+    <!--
+    <postprocessor>
+        <event name="test" type="java" path="org.apache.ofbiz.webapp.event.TestEvent" invoke="test"/>
+    </postprocessor>
+    -->
+
+    <!-- Request Mappings -->
+    <request-map uri="main"><security https="true" auth="true"/><response name="success" type="view" value="main"/></request-map>
+    
+    <!-- View Mappings -->
+    <view-map name="main" type="screen" page="component://EDI/widget/EDIScreens.xml#main"/>
+    
+    <!-- ************* -->
+    <!-- Configuration -->
+    <!-- ************* -->
+    
+	<!-- Create -->
+    <request-map uri="ctrlNewConfiguration">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="vNewConfiguration"/>        
+    </request-map>	    
+	<view-map name="vNewConfiguration" type="screen" page="component://EDI/widget/EDIScreens.xml#scrNewConfiguration"/>    				              
+
+    <request-map uri="ctrlNewConfigurationNoJava">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="vNewConfigurationNoJava"/>        
+    </request-map>	    
+	<view-map name="vNewConfigurationNoJava" type="screen" page="component://EDI/widget/EDIScreens.xml#scrNewConfigurationNoJava"/> 
+
+	<request-map uri="ctrCreateConfigurationNoJava">
+	    <security https="true" auth="true"/>
+	    <event type="service" invoke="srvNewConfigurationNoJava"/>
+	    <response name="success" type="view" value="vConfigurationOverview"/>
+	</request-map>
+     
+	<!-- Find -->
+    <request-map uri="ctrlFindConfiguration"><security https="true" auth="true"/><response name="success" type="view" value="vFindConfiguration"/></request-map>
+    <view-map name="vFindConfiguration" type="screen" page="component://EDI/widget/EDIScreens.xml#scrFindConfiguration"/>
+	  
+	 <!-- Overview -->   	
+    <request-map uri="ctrlConfigurationOverview"><security https="true" auth="true"/><response name="success" type="view" value="vConfigurationOverview"/></request-map>	
+	<view-map name="vConfigurationOverview" type="screen" page="component://EDI/widget/EDIScreens.xml#srcConfigurationOverview"/>	    	
+	    	
+	<!-- Edit -->    	
+    <request-map uri="crtlEditConfiguration"><security https="true" auth="true"/>
+    	<response name="success" type="view" value="vEditConfiguration"/>
+    </request-map>	    	
+ 	<view-map name="vEditConfiguration" type="screen" page="component://EDI/widget/EDIScreens.xml#srcEditConfiguration"/>
+      	
+    <!-- Create Java Service -->      
+    <request-map uri="ctrlCreateConfiguration">
+    	<security https="true" auth="true"/>
+    	<event type="service" invoke="srvCreateConfigurationByJava"/>
+    	<response name="success" type="view" value="vConfigurationOverview"/>
+    </request-map>       	
+    <view-map name="vConfigurationOverview" type="screen" page="component://EDI/widget/EDIScreens.xml#srcConfigurationOverview"/>      
+         	    	 
+    <!-- Update Java Service -->  
+    <request-map uri="ctrlUpdateConfiguration">
+    	<security https="true" auth="true"/>
+    	<event type="service" invoke="srvUpdateConfigurationByJava"/>
+    	<response name="success" type="view" value="vConfigurationOverview"/>
+    </request-map> 
+    
+    <!-- Delete Java Service -->  
+    <request-map uri="ctrlDeleteConfiguration">
+    	<security https="true" auth="true"/>
+    	<event type="service" invoke="srvDeleteConfigurationByJava"/>
+    	<response name="success" type="view" value="vFindConfiguration"/>
+    </request-map>      
+       
+	<!-- Delete -->	                  	     
+    <request-map uri="ctrlDeleteConfigurationNoJava">
+        <security https="true" auth="true"/>
+    	<event type="service" invoke="srvDeleteConfigurationNoJava"/>
+    	<response name="success" type="view" value="vFindConfiguration"/>
+    </request-map>	   
+    
+    <!-- Call SOAP Service -->  
+    <request-map uri="ctrlCallSoapService">
+    	<security https="true" auth="true"/>
+    	<event type="service" invoke="serviceCallGetNextSeqId"/>
+    	<response name="success" type="view" value="vFindConfiguration"/>
+    </request-map>      
+</site-conf>

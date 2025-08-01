@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<menus xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://ofbiz.apache.org/Widget-Menu" xsi:schemaLocation="http://ofbiz.apache.org/Widget-Menu http://ofbiz.apache.org/dtds/widget-menu.xsd">
+    <menu name="MainAppBar" title="${uiLabelMap.EDIApplication}" extends="CommonAppBarMenu" extends-resource="component://common/widget/CommonMenus.xml">
+        <menu-item name="main" title="${uiLabelMap.CommonMain}"><link target="main"/></menu-item>
+        <menu-item name="configuration" title="${uiLabelMap.MenuConfiguration}"><link target="ctrlFindConfiguration"/></menu-item>
+    </menu>
+    
+    <!-- ************* -->
+    <!-- Configuration -->
+    <!-- ************* -->    
+    
+    <menu name="mConfigurationSubTabBar" menu-container-style="button-bar button-style-2" default-selected-style="selected">
+        <menu-item name="createNewByJava" title="${uiLabelMap.CreateNewConfigurationByJava}" widget-style="buttontext create">
+            <link target="ctrlNewConfiguration"/>
+    	</menu-item>
+        <menu-item name="createNew" title="${uiLabelMap.CreateNewConfiguration}" widget-style="buttontext create">
+            <link target="ctrlNewConfigurationNoJava"/>
+    	</menu-item>	
+        <menu-item name="callSoap" title="Call SOAP Service" widget-style="buttontext create">
+            <link target="ctrlCallSoapService"/>
+    	</menu-item>    	    		
+   	</menu>
+    <menu name="mConfigurationSearchTabBar" menu-container-style="button-bar button-style-2" default-selected-style="selected">
+        <menu-item name="searchScreen" title="${uiLabelMap.SearchConfiguration}" widget-style="buttontext create">
+            <link target="ctrlFindConfiguration"/>
+    	</menu-item>
+   	</menu>      
+</menus>

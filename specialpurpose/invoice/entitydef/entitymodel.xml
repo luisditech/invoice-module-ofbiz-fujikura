@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entitymodel xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
+
+    <title>Entity of invoice Component</title>
+    <description>None</description>
+    <copyright></copyright>
+    <version></version>
+
+    <entity entity-name="FinInvoice"
+            package-name="org.apache.ofbiz.invoice.fin"
+            title="Invoice Header Entity">
+        <field name="invoiceId" type="id"/>
+        <field name="invCompany" type="id-ne"/>
+        <field name="invCountry" type="id-ne"/>
+        <field name="invSupplierVatNumber" type="long-varchar"/>
+        <field name="invSupplierName" type="long-varchar"/>
+        <field name="invSupplierCode" type="long-varchar"/>
+        <field name="invTaxType" type="long-varchar"/>
+        <field name="invIva" type="fixed-point"/>
+        <field name="invIrpf" type="fixed-point"/>
+        <field name="invCurrency" type="id-ne"/>
+        <field name="invPaymentMethod" type="long-varchar"/>
+        <field name="invInvoiceNumber" type="long-varchar"/>
+        <field name="invInvoiceDate" type="date"/>
+        <field name="invValueDate" type="date"/>
+        <field name="invPaymentDueDate" type="date"/>
+        <field name="invProof" type="numeric"/>
+        <field name="invAccountingCurrency" type="id-ne"/>
+        <field name="invExchangeRate" type="floating-point"/>
+        <field name="invNetAmount" type="fixed-point"/>
+        <field name="invAmountWithoutVat" type="fixed-point"/>
+        <field name="invTotalVatAmount" type="fixed-point"/>
+        <field name="invTotalVatAmountInAccountingCurrency" type="fixed-point"/>
+        <field name="invTotalAmountWithVat" type="fixed-point"/>
+        <field name="invStatus" type="long-varchar"/>
+        <field name="invPaymentDone" type="indicator"/>
+        <field name="invUuid" type="long-varchar"/>
+        <field name="invDocumentTypeCode" type="long-varchar"/>
+        <field name="invTotalDiscounts" type="fixed-point"/>
+        <field name="invTotalCharges" type="fixed-point"/>
+        <field name="invConfirmed" type="indicator"/>
+        <prim-key field="invoiceId"/>
+        <index name="FININVOICE_NUM_SUPPLIER" unique="false">
+            <index-field name="invCompany"/>
+            <index-field name="invSupplierVatNumber"/>
+            <index-field name="invInvoiceNumber"/>
+        </index>
+    </entity>
+    <entity entity-name="FinInvoiceLine"
+            package-name="org.apache.ofbiz.invoice.fin"
+            title="Invoice Line Item Entity">
+        <field name="invoiceId" type="id"/>
+        <field name="invoiceLineSeqId" type="id"/>
+        <field name="lineCompany" type="id-ne"/>
+        <field name="lineSupplierVatNumber" type="long-varchar"/>
+        <field name="lineInvoiceNumber" type="long-varchar"/>
+        <field name="lineLineId" type="numeric"/>
+        <field name="lineName" type="long-varchar"/>
+        <field name="lineDeliveryDate" type="date"/>
+        <field name="lineArticleCodeBySeller" type="long-varchar"/>
+        <field name="lineQuantity" type="fixed-point"/>
+        <field name="lineMeasurementUnit" type="id-ne"/>
+        <field name="lineUnitPrice" type="fixed-point"/>
+        <field name="lineDeliveryNote" type="long-varchar"/>
+        <field name="lineTaxType" type="long-varchar"/>
+        <field name="lineTaxRate" type="fixed-point"/>
+        <field name="lineNetAmount" type="fixed-point"/>
+        <field name="lineProof" type="long-varchar"/>
+        <field name="lineCc" type="long-varchar"/>
+        <field name="lineLocation" type="long-varchar"/>
+        <field name="lineSection" type="long-varchar"/>
+        <field name="lineArticleDescription" type="long-varchar"/>
+        <field name="lineInternalCode" type="long-varchar"/>
+        <field name="lineGlAccount" type="long-varchar"/>
+        <field name="lineProductCode" type="long-varchar"/>
+        <field name="lineTotalVatAmount" type="fixed-point"/>
+        <field name="lineTotalAmountWithVat" type="fixed-point"/>
+        <field name="lineTotalDiscounts" type="fixed-point"/>
+        <field name="lineTotalCharges" type="fixed-point"/>
+        <field name="lineAccountingCurrency" type="id-ne"/>
+        <field name="lineCurrencyExchange" type="floating-point"/>
+        <field name="lineProductType" type="long-varchar"/>
+        <field name="lineProject" type="long-varchar"/>
+        <field name="lineBranch" type="long-varchar"/>
+        <field name="lineUuid" type="long-varchar"/>
+        <prim-key field="invoiceId"/>
+        <prim-key field="invoiceLineSeqId"/>
+        <relation type="one" title="Invoice" rel-entity-name="FinInvoice">
+            <key-map field-name="invoiceId"/>
+        </relation>
+    </entity>
+</entitymodel>

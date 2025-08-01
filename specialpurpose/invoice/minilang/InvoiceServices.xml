@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-simple-methods.xsd">
+
+    <simple-method method-name="createFinInvoice" short-description="Create FinInvoice">
+        <check-permission service-name="invoiceGenericPermission" main-action="CREATE"
+                          permission-attribute-name="hasPermission"/>
+        <if-empty field="hasPermission">
+            <return response-code="fail" message="No permission to create FinInvoice."/>
+        </if-empty>
+
+        <make-value entity-name="FinInvoice" value-field="newFinInvoice"/>
+        <set-nonpk-fields map="parameters" value-field="newFinInvoice"/>
+        <create-value value-field="newFinInvoice"/>
+        <field-to-result field="newFinInvoice.invoiceId" result-name="invoiceId"/>
+        <log level="info" message="FinInvoice created with ID: ${invoiceId}"/>
+        <return response-code="success"/>
+    </simple-method>
+
+    <simple-method method-name="updateFinInvoice" short-description="Update FinInvoice">
+        <check-permission service-name="invoiceGenericPermission" main-action="UPDATE"
+                          permission-attribute-name="hasPermission"/>
+        <if-empty field="hasPermission">
+            <return response-code="fail" message="No permission to update FinInvoice."/>
+        </if-empty>
+
+        <entity-and entity-name="FinInvoice" list="finInvoices" use-iterator="false">
+            <field-map field-name="invoiceId" from-field="parameters.invoiceId"/>
+        </entity-and>
+        <if-empty field="finInvoices">
+            <return response-code="fail" message="FinInvoice with ID ${parameters.invoiceId} not found."/>
+        </if-empty>
+        <first-from-list list="finInvoices" entry="finInvoiceToUpdate"/>
+        <set-nonpk-fields map="parameters" value-field="finInvoiceToUpdate"/>
+        <store-value value-field="finInvoiceToUpdate"/>
+        <log level="info" message="FinInvoice with ID: ${parameters.invoiceId} updated."/>
+        <return response-code="success"/>
+    </simple-method>
+
+    <simple-method method-name="deleteFinInvoice" short-description="Delete FinInvoice">
+        <check-permission service-name="invoiceGenericPermission" main-action="DELETE"
+                          permission-attribute-name="hasPermission"/>
+        <if-empty field="hasPermission">
+            <return response-code="fail" message="No permission to delete FinInvoice."/>
+        </if-empty>
+
+        <entity-and entity-name="FinInvoice" list="finInvoices" use-iterator="false">
+            <field-map field-name="invoiceId" from-field="parameters.invoiceId"/>
+        </entity-and>
+        <if-empty field="finInvoices">
+            <return response-code="fail" message="FinInvoice with ID ${parameters.invoiceId} not found for deletion."/>
+        </if-empty>
+        <first-from-list list="finInvoices" entry="finInvoiceToDelete"/>
+        <remove-value value-field="finInvoiceToDelete"/>
+        <log level="info" message="FinInvoice with ID: ${parameters.invoiceId} deleted."/>
+        <return response-code="success"/>
+    </simple-method>
+
+    <simple-method method-name="createFinInvoiceLine" short-description="Create FinInvoiceLine">
+        <check-permission service-name="invoiceGenericPermission" main-action="CREATE"
+                          permission-attribute-name="hasPermission"/>
+        <if-empty field="hasPermission">
+            <return response-code="fail" message="No permission to create FinInvoiceLine."/>
+        </if-empty>
+
+        <make-value entity-name="FinInvoiceLine" value-field="newFinInvoiceLine"/>
+        <set-nonpk-fields map="parameters" value-field="newFinInvoiceLine"/>
+        <set-pk-fields map="parameters" value-field="newFinInvoiceLine"/>
+        <if-empty field="newFinInvoiceLine.invoiceLineSeqId">
+            <sequenced-id-to-field entity-name="FinInvoiceLine" field="newFinInvoiceLine.invoiceLineSeqId"/>
+        </if-empty>
+        <create-value value-field="newFinInvoiceLine"/>
+        <field-to-result field="newFinInvoiceLine.invoiceId" result-name="invoiceId"/>
+        <field-to-result field="newFinInvoiceLine.invoiceLineSeqId" result-name="invoiceLineSeqId"/>
+        <log level="info" message="FinInvoiceLine created for invoice ${invoiceId} with line ID: ${invoiceLineSeqId}"/>
+        <return response-code="success"/>
+    </simple-method>
+
+    <simple-method method-name="updateFinInvoiceLine" short-description="Update FinInvoiceLine">
+        <check-permission service-name="invoiceGenericPermission" main-action="UPDATE"
+                          permission-attribute-name="hasPermission"/>
+        <if-empty field="hasPermission">
+            <return response-code="fail" message="No permission to update FinInvoiceLine."/>
+        </if-empty>
+
+        <entity-and entity-name="FinInvoiceLine" list="finInvoiceLines" use-iterator="false">
+            <field-map field-name="invoiceId" from-field="parameters.invoiceId"/>
+            <field-map field-name="invoiceLineSeqId" from-field="parameters.invoiceLineSeqId"/>
+        </entity-and>
+        <if-empty field="finInvoiceLines">
+            <return response-code="fail" message="FinInvoiceLine for Invoice ID ${parameters.invoiceId} and Line ID ${parameters.invoiceLineSeqId} not found."/>
+        </if-empty>
+        <first-from-list list="finInvoiceLines" entry="finInvoiceLineToUpdate"/>
+        <set-nonpk-fields map="parameters" value-field="finInvoiceLineToUpdate"/>
+        <store-value value-field="finInvoiceLineToUpdate"/>
+        <log level="info" message="FinInvoiceLine for invoice ${parameters.invoiceId} with line ID: ${parameters.invoiceLineSeqId} updated."/>
+        <return response-code="success"/>
+    </simple-method>
+
+    <simple-method method-name="deleteFinInvoiceLine" short-description="Delete FinInvoiceLine">
+        <check-permission service-name="invoiceGenericPermission" main-action="DELETE"
+                          permission-attribute-name="hasPermission"/>
+        <if-empty field="hasPermission">
+            <return response-code="fail" message="No permission to delete FinInvoiceLine."/>
+        </if-empty>
+
+        <entity-and entity-name="FinInvoiceLine" list="finInvoiceLines" use-iterator="false">
+            <field-map field-name="invoiceId" from-field="parameters.invoiceId"/>
+            <field-map field-name="invoiceLineSeqId" from-field="parameters.invoiceLineSeqId"/>
+        </entity-and>
+        <if-empty field="finInvoiceLines">
+            <return response-code="fail" message="FinInvoiceLine for Invoice ID ${parameters.invoiceId} and Line ID ${parameters.invoiceLineSeqId} not found for deletion."/>
+        </if-empty>
+        <first-from-list list="finInvoiceLines" entry="finInvoiceLineToDelete"/>
+        <remove-value value-field="finInvoiceLineToDelete"/>
+        <log level="info" message="FinInvoiceLine for invoice ${parameters.invoiceId} with line ID: ${parameters.invoiceLineSeqId} deleted."/>
+        <return response-code="success"/>
+    </simple-method>
+
+</simple-methods>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ofbiz-component name="invoice"
+                 xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                 xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-component.xsd">
+
+    <resource-loader name="main" type="component"/>
+
+    <classpath type="dir" location="config"/>
+
+    <!-- ENTITIES -->
+    <entity-resource type="model" reader-name="main" loader="main" location="entitydef/entitymodel.xml"/>
+    <entity-resource type="data" reader-name="main" loader="main" location="data/InvoiceData.xml"/>
+
+    <!-- SERVICES -->
+    <service-resource type="model" loader="main" location="servicedef/services.xml"/>
+
+    <!-- TEST SUITE opcional -->
+    <!-- <test-suite loader="main" location="tests/TestSuite.xml" optional="true"/> -->
+
+    <!-- WEBAPP -->
+    <webapp name="invoice"
+            title="Invoice"
+            server="default-server"
+            location="webapp/invoice"
+            mount-point="/invoice"/>
+</ofbiz-component>
+

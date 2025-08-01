@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+    <AppDecor applicationName="invoice" menuName="MainAppBar" tabGroupName="main"
+              title="${uiLabelMap.InvoiceManagementTitle}"
+              tooltip="${uiLabelMap.InvoiceManagementTitle}"/>
+</entity-engine-xml>

@@ -1,0 +1,307 @@
+<?xml version="1.0" ?>
+<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-properties.xsd">
+    <property key="CommonCancel">
+        <value xml:lang="en">Cancel</value>
+        <value xml:lang="es">Cancelar</value>
+    </property>
+    <property key="CommonCannotBeChanged">
+        <value xml:lang="en">Cannot Be Changed</value>
+        <value xml:lang="es">No se puede modificar</value>
+    </property>
+    <property key="CommonEdit">
+        <value xml:lang="en">Edit</value>
+        <value xml:lang="es">Editar</value>
+    </property>
+    <property key="CommonFind">
+        <value xml:lang="en">Find</value>
+        <value xml:lang="es">Buscar</value>
+    </property>
+    <property key="CommonNo">
+        <value xml:lang="en">No</value>
+        <value xml:lang="es">No</value>
+    </property>
+    <property key="CommonSave">
+        <value xml:lang="en">Save</value>
+        <value xml:lang="es">Guardar</value>
+    </property>
+    <property key="CommonYes">
+        <value xml:lang="en">Yes</value>
+        <value xml:lang="es">Sí</value>
+    </property>
+    <property key="FindInvoices">
+        <value xml:lang="en">Find Invoices</value>
+        <value xml:lang="es">Buscar Facturas</value>
+    </property>
+    <property key="InvoiceAccountingCurrency">
+        <value xml:lang="en">Accounting Currency</value>
+        <value xml:lang="es">Moneda Contable</value>
+    </property>
+    <property key="InvoiceAmountWithoutVat">
+        <value xml:lang="en">Amount Without VAT</value>
+        <value xml:lang="es">Importe sin IVA</value>
+    </property>
+    <property key="InvoiceCompany">
+        <value xml:lang="en">Company</value>
+        <value xml:lang="es">Empresa</value>
+    </property>
+    <property key="InvoiceCountry">
+        <value xml:lang="en">Country</value>
+        <value xml:lang="es">País</value>
+    </property>
+    <property key="InvoiceCreateNewInvoice">
+        <value xml:lang="en">Create New Invoice</value>
+        <value xml:lang="es">Crear Nueva Factura</value>
+    </property>
+    <property key="InvoiceCreateNewLine">
+        <value xml:lang="en">Create New Invoice Line</value>
+        <value xml:lang="es">Crear Nueva Línea de Factura</value>
+    </property>
+    <property key="InvoiceCurrency">
+        <value xml:lang="en">Currency</value>
+        <value xml:lang="es">Moneda</value>
+    </property>
+    <property key="InvoiceDocumentTypeCode">
+        <value xml:lang="en">Document Type Code</value>
+        <value xml:lang="es">Tipo Documento</value>
+    </property>
+    <property key="InvoiceExchangeRate">
+        <value xml:lang="en">Exchange Rate</value>
+        <value xml:lang="es">Tipo de Cambio</value>
+    </property>
+    <property key="InvoiceFindInvoiceTitle">
+        <value xml:lang="en">Find Invoices</value>
+        <value xml:lang="es">Buscar Facturas</value>
+    </property>
+    <property key="InvoiceInvoiceDate">
+        <value xml:lang="en">Invoice Date</value>
+        <value xml:lang="es">Fecha de Factura</value>
+    </property>
+    <property key="InvoiceInvoiceId">
+        <value xml:lang="en">Invoice ID</value>
+        <value xml:lang="es">ID de Factura</value>
+    </property>
+    <property key="InvoiceInvoiceLineList">
+        <value xml:lang="en">Invoice Line List</value>
+        <value xml:lang="es">Líneas de Factura</value>
+    </property>
+    <property key="InvoiceInvoiceNumber">
+        <value xml:lang="en">Invoice Number</value>
+        <value xml:lang="es">Número de Factura</value>
+    </property>
+    <property key="InvoiceIrpf">
+        <value xml:lang="en">IRPF</value>
+        <value xml:lang="es">IRPF</value>
+    </property>
+    <property key="InvoiceIva">
+        <value xml:lang="en">VAT</value>
+        <value xml:lang="es">IVA</value>
+    </property>
+    <property key="InvoiceLineAccountingCurrency">
+        <value xml:lang="en">Accounting Currency</value>
+        <value xml:lang="es">Moneda Contable</value>
+    </property>
+    <property key="InvoiceLineArticleCodeBySeller">
+        <value xml:lang="en">Article Code (Seller)</value>
+        <value xml:lang="es">Código Artículo (Vendedor)</value>
+    </property>
+    <property key="InvoiceLineArticleDescription">
+        <value xml:lang="en">Article Description</value>
+        <value xml:lang="es">Descripción Artículo</value>
+    </property>
+    <property key="InvoiceLineBranch">
+        <value xml:lang="en">Branch</value>
+        <value xml:lang="es">Sucursal</value>
+    </property>
+    <property key="InvoiceLineCc">
+        <value xml:lang="en">CC</value>
+        <value xml:lang="es">Centro de Coste</value>
+    </property>
+    <property key="InvoiceLineCompany">
+        <value xml:lang="en">Company</value>
+        <value xml:lang="es">Empresa</value>
+    </property>
+    <property key="InvoiceLineCurrencyExchange">
+        <value xml:lang="en">Currency Exchange</value>
+        <value xml:lang="es">Cambio Moneda</value>
+    </property>
+    <property key="InvoiceLineDeliveryDate">
+        <value xml:lang="en">Delivery Date</value>
+        <value xml:lang="es">Fecha Entrega</value>
+    </property>
+    <property key="InvoiceLineDeliveryNote">
+        <value xml:lang="en">Delivery Note</value>
+        <value xml:lang="es">Albarán</value>
+    </property>
+    <property key="InvoiceLineGlAccount">
+        <value xml:lang="en">GL Account</value>
+        <value xml:lang="es">Cuenta Contable</value>
+    </property>
+    <property key="InvoiceLineInternalCode">
+        <value xml:lang="en">Internal Code</value>
+        <value xml:lang="es">Código Interno</value>
+    </property>
+    <property key="InvoiceLineInvoiceNumber">
+        <value xml:lang="en">Invoice Number</value>
+        <value xml:lang="es">Número de Factura</value>
+    </property>
+    <property key="InvoiceLineLineId">
+        <value xml:lang="en">Line ID</value>
+        <value xml:lang="es">ID Línea</value>
+    </property>
+    <property key="InvoiceLineLocation">
+        <value xml:lang="en">Location</value>
+        <value xml:lang="es">Ubicación</value>
+    </property>
+    <property key="InvoiceLineMeasurementUnit">
+        <value xml:lang="en">Unit</value>
+        <value xml:lang="es">Unidad de Medida</value>
+    </property>
+    <property key="InvoiceLineName">
+        <value xml:lang="en">Name</value>
+        <value xml:lang="es">Descripción</value>
+    </property>
+    <property key="InvoiceLineNetAmount">
+        <value xml:lang="en">Net Amount</value>
+        <value xml:lang="es">Importe Neto</value>
+    </property>
+    <property key="InvoiceLineProductCode">
+        <value xml:lang="en">Product Code</value>
+        <value xml:lang="es">Código de Producto</value>
+    </property>
+    <property key="InvoiceLineProductType">
+        <value xml:lang="en">Product Type</value>
+        <value xml:lang="es">Tipo de Producto</value>
+    </property>
+    <property key="InvoiceLineProject">
+        <value xml:lang="en">Project</value>
+        <value xml:lang="es">Proyecto</value>
+    </property>
+    <property key="InvoiceLineProof">
+        <value xml:lang="en">Proof</value>
+        <value xml:lang="es">Prueba</value>
+    </property>
+    <property key="InvoiceLineQuantity">
+        <value xml:lang="en">Quantity</value>
+        <value xml:lang="es">Cantidad</value>
+    </property>
+    <property key="InvoiceLineSection">
+        <value xml:lang="en">Section</value>
+        <value xml:lang="es">Sección</value>
+    </property>
+    <property key="InvoiceLineSupplierVatNumber">
+        <value xml:lang="en">Supplier VAT Number</value>
+        <value xml:lang="es">NIF Proveedor</value>
+    </property>
+    <property key="InvoiceLineTaxRate">
+        <value xml:lang="en">Tax Rate</value>
+        <value xml:lang="es">Porcentaje Impuesto</value>
+    </property>
+    <property key="InvoiceLineTaxType">
+        <value xml:lang="en">Tax Type</value>
+        <value xml:lang="es">Tipo Impuesto</value>
+    </property>
+    <property key="InvoiceLineTotalAmountWithVat">
+        <value xml:lang="en">Total With VAT</value>
+        <value xml:lang="es">Importe Total con IVA</value>
+    </property>
+    <property key="InvoiceLineTotalCharges">
+        <value xml:lang="en">Total Charges</value>
+        <value xml:lang="es">Total Recargos</value>
+    </property>
+    <property key="InvoiceLineTotalDiscounts">
+        <value xml:lang="en">Total Discounts</value>
+        <value xml:lang="es">Total Descuentos</value>
+    </property>
+    <property key="InvoiceLineTotalVatAmount">
+        <value xml:lang="en">Total VAT Amount</value>
+        <value xml:lang="es">Importe Total IVA</value>
+    </property>
+    <property key="InvoiceLineUnitPrice">
+        <value xml:lang="en">Unit Price</value>
+        <value xml:lang="es">Precio Unitario</value>
+    </property>
+    <property key="InvoiceLineUuid">
+        <value xml:lang="en">UUID</value>
+        <value xml:lang="es">UUID</value>
+    </property>
+    <property key="InvoiceManagementTitle">
+        <value xml:lang="en">Invoice Management</value>
+        <value xml:lang="es">Gestión de Facturas</value>
+    </property>
+    <property key="InvoiceNetAmount">
+        <value xml:lang="en">Net Amount</value>
+        <value xml:lang="es">Importe Neto</value>
+    </property>
+    <property key="InvoicePaymentDone">
+        <value xml:lang="en">Payment Done</value>
+        <value xml:lang="es">Pago Realizado</value>
+    </property>
+    <property key="InvoicePaymentDueDate">
+        <value xml:lang="en">Payment Due Date</value>
+        <value xml:lang="es">Fecha Vencimiento Pago</value>
+    </property>
+    <property key="InvoicePaymentMethod">
+        <value xml:lang="en">Payment Method</value>
+        <value xml:lang="es">Método de Pago</value>
+    </property>
+    <property key="InvoiceProof">
+        <value xml:lang="en">Proof</value>
+        <value xml:lang="es">Prueba</value>
+    </property>
+    <property key="InvoiceStatus">
+        <value xml:lang="en">Status</value>
+        <value xml:lang="es">Estado</value>
+    </property>
+    <property key="InvoiceSupplierCode">
+        <value xml:lang="en">Supplier Code</value>
+        <value xml:lang="es">Código Proveedor</value>
+    </property>
+    <property key="InvoiceSupplierName">
+        <value xml:lang="en">Supplier Name</value>
+        <value xml:lang="es">Nombre del Proveedor</value>
+    </property>
+    <property key="InvoiceSupplierVatNumber">
+        <value xml:lang="en">Supplier VAT Number</value>
+        <value xml:lang="es">NIF Proveedor</value>
+    </property>
+    <property key="InvoiceTaxType">
+        <value xml:lang="en">Tax Type</value>
+        <value xml:lang="es">Tipo Impuesto</value>
+    </property>
+    <property key="InvoiceTotalAmountWithVat">
+        <value xml:lang="en">Total With VAT</value>
+        <value xml:lang="es">Total con IVA</value>
+    </property>
+    <property key="InvoiceTotalCharges">
+        <value xml:lang="en">Total Charges</value>
+        <value xml:lang="es">Total Recargos</value>
+    </property>
+    <property key="InvoiceTotalDiscounts">
+        <value xml:lang="en">Total Discounts</value>
+        <value xml:lang="es">Total Descuentos</value>
+    </property>
+    <property key="InvoiceTotalVatAmount">
+        <value xml:lang="en">Total VAT Amount</value>
+        <value xml:lang="es">Importe Total IVA</value>
+    </property>
+    <property key="InvoiceTotalVatAmountInAccountingCurrency">
+        <value xml:lang="en">Total VAT (Acc. Currency)</value>
+        <value xml:lang="es">Importe Total IVA (Moneda Contable)</value>
+    </property>
+    <property key="InvoiceUuid">
+        <value xml:lang="en">UUID</value>
+        <value xml:lang="es">UUID</value>
+    </property>
+    <property key="InvoiceValueDate">
+        <value xml:lang="en">Value Date</value>
+        <value xml:lang="es">Fecha Valor</value>
+    </property>
+    <property key="InvoiceViewInvoiceTitle">
+        <value xml:lang="en">View Invoice</value>
+        <value xml:lang="es">Ver Factura</value>
+    </property>
+    <property key="CommonPrint">
+        <value xml:lang="en">Print</value>
+        <value xml:lang="es">Imprimir</value>
+    </property>
+</resource>

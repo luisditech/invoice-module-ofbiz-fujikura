@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xmlns="http://ofbiz.apache.org/Widget-Screen"
+         xsi:schemaLocation="http://ofbiz.apache.org/Widget-Screen http://ofbiz.apache.org/dtds/widget-screen.xsd">
+
+    <!-- Pantalla principal -->
+    <screen name="main">
+        <section>
+            <actions>
+                <set field="titleProperty" value="FindInvoices"/>
+                <set field="entityList" from-field="parameters.entityList"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="InvoiceCommonDecorator" location="component://invoice/widget/CommonScreens.xml">
+                    <decorator-section name="body">
+                        <section>
+                            <widgets>
+                                <include-screen name="FindInvoicesBody"/>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!--<screen name="FindInvoicesBody">
+        <section>
+            <widgets>
+                <include-form name="FindInvoicesForm" location="component://invoice/widget/forms/InvoiceForms.xml"/>
+
+                <include-form name="ListInvoicesForm" location="component://invoice/widget/forms/InvoiceForms.xml"/>
+            </widgets>
+        </section>
+    </screen>-->
+
+    <screen name="FindInvoicesBody">
+        <section>
+            <widgets>
+
+                <!-- Formulario de filtros -->
+                <include-form name="FindInvoicesForm" location="component://invoice/widget/forms/InvoiceForms.xml"/>
+
+                <!-- Cuando NO hay filtros: mostramos TODAS las facturas -->
+                <section>
+                    <condition>
+                        <and>
+                            <if-empty field="parameters.invInvoiceNumber"/>
+                            <if-empty field="parameters.invSupplierCode"/>
+                            <if-empty field="parameters.invSupplierVatNumber"/>
+                            <if-empty field="parameters.invInvoiceDateFrom"/>
+                            <if-empty field="parameters.invInvoiceDateTo"/>
+                            <if-empty field="parameters.invValueDateFrom"/>
+                            <if-empty field="parameters.invValueDateTo"/>
+                            <if-empty field="parameters.invPaymentDueDateFrom"/>
+                            <if-empty field="parameters.invPaymentDueDateTo"/>
+                            <if-empty field="parameters.invTaxType"/>
+                            <if-empty field="parameters.invTaxRate"/>
+                            <if-empty field="parameters.invCurrency"/>
+                            <if-empty field="parameters.invPaymentMethod"/>
+                            <if-empty field="parameters.invNetAmountFrom"/>
+                            <if-empty field="parameters.invNetAmountTo"/>
+                            <if-empty field="parameters.invConfirmed"/>
+                            <if-empty field="parameters.invPaymentDone"/>
+                        </and>
+                    </condition>
+                    <widgets>
+                        <!-- Este sí ejecuta el servicio para cargar todo -->
+                        <include-form name="ListInvoicesFormFull" location="component://invoice/widget/forms/InvoiceForms.xml"/>
+                    </widgets>
+                </section>
+
+                <!-- Cuando HAY filtros: mostramos resultados filtrados -->
+                <section>
+                    <condition>
+                        <not>
+                            <and>
+                                <if-empty field="parameters.invInvoiceNumber"/>
+                                <if-empty field="parameters.invSupplierCode"/>
+                                <if-empty field="parameters.invSupplierVatNumber"/>
+                                <if-empty field="parameters.invInvoiceDateFrom"/>
+                                <if-empty field="parameters.invInvoiceDateTo"/>
+                                <if-empty field="parameters.invValueDateFrom"/>
+                                <if-empty field="parameters.invValueDateTo"/>
+                                <if-empty field="parameters.invPaymentDueDateFrom"/>
+                                <if-empty field="parameters.invPaymentDueDateTo"/>
+                                <if-empty field="parameters.invTaxType"/>
+                                <if-empty field="parameters.invTaxRate"/>
+                                <if-empty field="parameters.invCurrency"/>
+                                <if-empty field="parameters.invPaymentMethod"/>
+                                <if-empty field="parameters.invNetAmountFrom"/>
+                                <if-empty field="parameters.invNetAmountTo"/>
+                                <if-empty field="parameters.invConfirmed"/>
+                                <if-empty field="parameters.invPaymentDone"/>
+                            </and>
+                        </not>
+                    </condition>
+                    <widgets>
+                        <!-- Este solo muestra lo que ya viene en entityList -->
+                        <include-form name="ListInvoicesForm" location="component://invoice/widget/forms/InvoiceForms.xml"/>
+                    </widgets>
+                </section>
+
+            </widgets>
+        </section>
+    </screen>
+
+
+    <!-- Pantalla para editar factura -->
+    <screen name="EditInvoice">
+        <section>
+            <actions>
+                <set field="titleProperty" value="EditInvoice"/>
+                <set field="mainDecoratorLocation" value="component://invoice/widget/CommonScreens.xml"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="InvoiceCommonDecorator" location="component://invoice/widget/CommonScreens.xml">
+                    <decorator-section name="body">
+                        <section>
+                            <widgets>
+                                <include-screen name="EditInvoiceBody"/>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="EditInvoiceBody">
+        <section>
+            <widgets>
+                <label text="Edit Invoice Data"/>
+                <include-form name="EditInvoiceForm" location="component://invoice/widget/forms/InvoiceForms.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Pantalla para ver factura -->
+    <screen name="ViewInvoice">
+        <section>
+            <actions>
+                <set field="titleProperty" value="ViewInvoice"/>
+                <set field="mainDecoratorLocation" value="component://invoice/widget/CommonScreens.xml"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="InvoiceCommonDecorator" location="component://invoice/widget/CommonScreens.xml">
+                    <decorator-section name="body">
+                        <container>
+                            <link text="${uiLabelMap.CommonPrint}" style="buttontext" target="javascript:window.print();" url-mode="plain"/>
+                        </container>
+                        <section>
+                            <widgets>
+                                <include-screen name="ViewInvoiceBody"/>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="ViewInvoiceBody">
+        <section>
+            <widgets>
+                <label text="Invoice Details"/>
+                <include-form name="ViewInvoiceForm" location="component://invoice/widget/forms/InvoiceForms.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- Pantalla para editar línea de factura -->
+    <screen name="EditInvoiceLine">
+        <section>
+            <actions>
+                <set field="titleProperty" value="EditInvoiceLine"/>
+                <set field="mainDecoratorLocation" value="component://invoice/widget/CommonScreens.xml"/>
+            </actions>
+            <widgets>
+                <decorator-screen name="InvoiceCommonDecorator" location="component://invoice/widget/CommonScreens.xml">
+                    <decorator-section name="body">
+                        <section>
+                            <widgets>
+                                <include-screen name="EditInvoiceLineBody"/>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <screen name="EditInvoiceLineBody">
+        <section>
+            <widgets>
+                <label text="Edit Invoice Line"/>
+                <include-form name="EditInvoiceLineForm" location="component://invoice/widget/forms/InvoiceForms.xml"/>
+            </widgets>
+        </section>
+    </screen>
+
+</screens>

@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<resource xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-properties.xsd">
+    <property key="EDIApplication">
+        <value xml:lang="en">EDI Application</value>
+        <value xml:lang="zh">EDI应用程�?</value>
+        <value xml:lang="zh-TW">EDI應用程�?</value>
+    </property>
+    <property key="EDICompanyName">
+        <value xml:lang="en">OFBiz: EDI</value>
+        <value xml:lang="zh-TW">OFBiz: EDI</value>
+    </property>
+    <property key="EDICompanySubtitle">
+        <value xml:lang="en">Part of the Apache OFBiz Family of Open Source Software</value>
+        <value xml:lang="it">Un modulo della famiglia di software open source Apache OFBiz</value>
+        <value xml:lang="zh">开�?软件OFBiz的组�?部分</value>
+        <value xml:lang="zh-TW">開�?軟體OFBiz的組�?部分</value>
+    </property>
+    <property key="EDIViewPermissionError">
+        <value xml:lang="en">You are not allowed to view this page.</value>
+        <value xml:lang="zh">�?�?许你�?览这个页�?�。</value>
+        <value xml:lang="zh-TW">�?�?許您檢視這個�?�?�.</value>
+    </property>
+    
+    <!-- ************* -->
+    <!-- Menus         -->
+    <!-- ************* -->      
+    
+ 	<property key="MenuConfiguration">
+    	<value xml:lang="en">Configuration</value>
+    	<value xml:lang="es">Configuration</value>    	
+	</property>      
+ 	<property key="MenuHistoryTypes">
+    	<value xml:lang="en">HistoryType</value>
+    	<value xml:lang="es">HistoryType</value>    	
+	</property>    
+ 	<property key="MenuMessageHistory">
+    	<value xml:lang="en">MessageHistory</value>
+    	<value xml:lang="es">MessageHistory</value>    	
+	</property>       
+	<property key="MenuPartnerProperties">
+    	<value xml:lang="en">PartnerProperties</value>
+    	<value xml:lang="es">PartnerProperties</value>    	
+	</property> 
+	<property key="MenuMessages">
+    	<value xml:lang="en">Messages</value>
+    	<value xml:lang="es">Messages</value>    	
+	</property> 	
+    
+    <!-- ************* -->
+    <!-- Messages -->
+    <!-- ************* -->      
+    
+	<property key="PageTitleFindMessages">
+   		<value xml:lang="en">Search Messages</value>
+   		<value xml:lang="es">Search Messages</value>
+	</property>		    
+	<property key="CreateNewMessages">
+   		<value xml:lang="en">Create new Messages</value>
+   		<value xml:lang="es">Create new Messages</value>
+	</property>	    
+	<property key="PageTitleEditMessages">
+   		<value xml:lang="en">Edit Messages</value>
+   		<value xml:lang="es">Edit Messages</value>
+	</property>		
+	<property key="SearchMessages">
+   		<value xml:lang="en">Search</value>
+   		<value xml:lang="es">Search</value>
+	</property>		
+	<property key="SearchMessages">
+   		<value xml:lang="en">Search</value>
+   		<value xml:lang="es">Search</value>
+	</property>	    
+    
+    <!-- ************* -->
+    <!-- Configuration -->
+    <!-- ************* -->      
+    
+	<property key="PageTitleFindConfiguration">
+   		<value xml:lang="en">Search Configuration2</value>
+   		<value xml:lang="es">Search Configuration2</value>
+	</property>		    
+	<property key="CreateNewConfiguration">
+   		<value xml:lang="en">Create new Configuration</value>
+   		<value xml:lang="es">Create new Configuration</value>
+	</property>	    
+	<property key="CreateNewConfigurationByJava">
+   		<value xml:lang="en">Create new Configuration by Java</value>
+   		<value xml:lang="es">Create new Configuration by Java</value>
+	</property>	 	
+	<property key="PageTitleEditConfiguration">
+   		<value xml:lang="en">Edit Configuration</value>
+   		<value xml:lang="es">Edit Configuration</value>
+	</property>		
+	<property key="SearchConfiguration">
+   		<value xml:lang="en">Search</value>
+   		<value xml:lang="es">Search</value>
+	</property>		
+	<property key="SearchConfiguration">
+   		<value xml:lang="en">Search</value>
+   		<value xml:lang="es">Search</value>
+	</property>		
+		
+
+    <!-- ************* -->
+    <!-- Common        -->
+    <!-- ************* -->
+
+	<property key="EDIConfirmDelete">
+   		<value xml:lang="en">Do you want delete this record ?</value>
+   		<value xml:lang="es">Do you want delete this record ?</value>
+	</property>	    
+	
+    <property key="CommonDeleteByJava">
+        <value xml:lang="ar">حذف</value>
+        <value xml:lang="cs">Smazat Java</value>
+        <value xml:lang="de">Löschen Java</value>
+        <value xml:lang="en">Delete By Java</value>
+        <value xml:lang="es">Eliminar por Java</value>
+        <value xml:lang="fr">Supprimer Java</value>
+        <value xml:lang="hi-IN">मिटाए Java</value>
+        <value xml:lang="it">Cancella Java</value>
+        <value xml:lang="ja">削除 Java</value>
+        <value xml:lang="nl">Wis Java</value>
+        <value xml:lang="pt">Apagar Java</value>
+        <value xml:lang="pt-BR">Excluir Java</value>
+        <value xml:lang="pt-PT">Eliminar Java</value>
+        <value xml:lang="ro">Sterge Java</value>
+        <value xml:lang="ru">Удалить Java</value>
+        <value xml:lang="th">ลบ Java</value>
+        <value xml:lang="vi">Xóa Java</value>
+        <value xml:lang="zh">删除 Java</value>
+        <value xml:lang="zh-CN">删除 Java</value>
+        <value xml:lang="zh-TW">刪除 Java</value>
+    </property>
+</resource>
