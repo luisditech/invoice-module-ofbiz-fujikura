@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://ofbiz.apache.org/Widget-Screen" xsi:schemaLocation="http://ofbiz.apache.org/Widget-Screen http://ofbiz.apache.org/dtds/widget-screen.xsd">
+         xmlns="http://ofbiz.apache.org/Widget-Screen"
+         xsi:schemaLocation="http://ofbiz.apache.org/Widget-Screen http://ofbiz.apache.org/dtds/widget-screen.xsd">
 
     <screen name="main-decorator">
         <section>
@@ -24,16 +25,10 @@
 
     <screen name="InvoiceCommonDecorator">
         <section>
-            <actions>
-            </actions>
             <widgets>
                 <decorator-screen name="main-decorator" location="component://invoice/widget/CommonScreens.xml">
                     <decorator-section name="body">
                         <section>
-                            <!-- <condition>
-                                <if-has-permission permission="EDI" action="_VIEW"/>
-                            </condition>
-                            -->
                             <widgets>
                                 <decorator-section-include name="body"/>
                             </widgets>

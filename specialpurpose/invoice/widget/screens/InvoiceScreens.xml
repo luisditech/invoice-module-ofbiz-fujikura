@@ -3,12 +3,14 @@
          xmlns="http://ofbiz.apache.org/Widget-Screen"
          xsi:schemaLocation="http://ofbiz.apache.org/Widget-Screen http://ofbiz.apache.org/dtds/widget-screen.xsd">
 
+    <!-- ================= -->
     <!-- Pantalla principal -->
+    <!-- ================= -->
     <screen name="main">
         <section>
             <actions>
+                <property-map resource="InvoiceUiLabels" map-name="uiLabelMap" global="true"/>
                 <set field="titleProperty" value="FindInvoices"/>
-                <set field="entityList" from-field="parameters.entityList"/>
             </actions>
             <widgets>
                 <decorator-screen name="InvoiceCommonDecorator" location="component://invoice/widget/CommonScreens.xml">
@@ -24,24 +26,17 @@
         </section>
     </screen>
 
-    <!--<screen name="FindInvoicesBody">
-        <section>
-            <widgets>
-                <include-form name="FindInvoicesForm" location="component://invoice/widget/forms/InvoiceForms.xml"/>
-
-                <include-form name="ListInvoicesForm" location="component://invoice/widget/forms/InvoiceForms.xml"/>
-            </widgets>
-        </section>
-    </screen>-->
-
+    <!-- =================== -->
+    <!-- Cuerpo: buscar/lista -->
+    <!-- =================== -->
     <screen name="FindInvoicesBody">
         <section>
             <widgets>
 
-                <!-- Formulario de filtros -->
+                <!-- Filtros -->
                 <include-form name="FindInvoicesForm" location="component://invoice/widget/forms/InvoiceForms.xml"/>
 
-                <!-- Cuando NO hay filtros: mostramos TODAS las facturas -->
+                <!-- Sin filtros => lista completa -->
                 <section>
                     <condition>
                         <and>
@@ -65,12 +60,11 @@
                         </and>
                     </condition>
                     <widgets>
-                        <!-- Este sí ejecuta el servicio para cargar todo -->
                         <include-form name="ListInvoicesFormFull" location="component://invoice/widget/forms/InvoiceForms.xml"/>
                     </widgets>
                 </section>
 
-                <!-- Cuando HAY filtros: mostramos resultados filtrados -->
+                <!-- Con filtros => lista filtrada (usa entityList que ya venga en contexto) -->
                 <section>
                     <condition>
                         <not>
@@ -96,8 +90,8 @@
                         </not>
                     </condition>
                     <widgets>
-                        <!-- Este solo muestra lo que ya viene en entityList -->
                         <include-form name="ListInvoicesForm" location="component://invoice/widget/forms/InvoiceForms.xml"/>
+                        <platform-specific><html><html-template location="component://invoice/webapp/invoice/includes/invoiceListDblClick.ftl"/></html></platform-specific>
                     </widgets>
                 </section>
 
@@ -105,13 +99,59 @@
         </section>
     </screen>
 
+    <screen name="ViewInvoiceHeader">
+        <section>
+            <actions>
+                <property-map resource="InvoiceUiLabels" map-name="uiLabelMap" global="true"/>
+                <set field="titleProperty" value="ViewInvoice"/>
+                <entity-one entity-name="FinInvoice" value-field="invoice">
+                    <field-map field-name="invoiceId" from-field="parameters.invoiceId"/>
+                </entity-one>
+            </actions>
+            <widgets>
+                <decorator-screen name="InvoiceCommonDecorator" location="component://invoice/widget/CommonScreens.xml">
+                    <decorator-section name="body">
+                        <section>
+                            <condition><if-empty field="invoice"/></condition>
+                            <widgets>
+                                <label style="required-field" text="Invoice not found"/>
+                                <container>
+                                    <link target="findInvoices" text="${uiLabelMap.CommonBack}" style="buttontext"/>
+                                </container>
+                            </widgets>
+                        </section>
+                        <section>
+                            <condition><not><if-empty field="invoice"/></not></condition>
+                            <widgets>
+                                <container>
+                                    <link text="${uiLabelMap.CommonPrint}" style="buttontext"
+                                          target="javascript:window.print();" url-mode="plain"/>
+                                </container>
+                                <!-- Reutilizamos tu form de cabecera -->
+                                <include-form location="component://invoice/widget/forms/InvoiceForms.xml"
+                                              name="ViewInvoiceForm"/>
+                                <container>
+                                    <link target="findInvoices" text="${uiLabelMap.CommonBack}" style="buttontext"/>
+                                    <link target="viewInvoiceLines" text="Invoice Lines" style="buttontext">
+                                        <parameter param-name="invoiceId" from-field="parameters.invoiceId"/>
+                                    </link>
+                                </container>
+                            </widgets>
+                        </section>
+                    </decorator-section>
+                </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
 
-    <!-- Pantalla para editar factura -->
+    <!-- ===================== -->
+    <!-- Pantalla: editar cab. -->
+    <!-- ===================== -->
     <screen name="EditInvoice">
         <section>
             <actions>
+                <property-map resource="InvoiceUiLabels" map-name="uiLabelMap" global="true"/>
                 <set field="titleProperty" value="EditInvoice"/>
-                <set field="mainDecoratorLocation" value="component://invoice/widget/CommonScreens.xml"/>
             </actions>
             <widgets>
                 <decorator-screen name="InvoiceCommonDecorator" location="component://invoice/widget/CommonScreens.xml">
@@ -136,45 +176,94 @@
         </section>
     </screen>
 
-    <!-- Pantalla para ver factura -->
+    <!-- ===================== -->
+    <!-- Pantalla: ver cabecera -->
+    <!-- ===================== -->
     <screen name="ViewInvoice">
         <section>
             <actions>
+                <property-map resource="InvoiceUiLabels" map-name="uiLabelMap" global="true"/>
                 <set field="titleProperty" value="ViewInvoice"/>
-                <set field="mainDecoratorLocation" value="component://invoice/widget/CommonScreens.xml"/>
+
+                <!-- Cargar la cabecera y guardarla como 'invoice' -->
+                <entity-one entity-name="FinInvoice" value-field="invoice">
+                    <field-map field-name="invoiceId" from-field="parameters.invoiceId"/>
+                </entity-one>
+                <!-- Cargar líneas usando performFind -->
+                <service service-name="performFind" result-map="findLines">
+                    <field-map field-name="entityName" value="FinInvoiceLine"/>
+                    <!-- Pasamos todos los parámetros (incluye invoiceId); el servicio filtrará por invoiceId -->
+                    <field-map field-name="inputFields" from-field="parameters"/>
+                    <field-map field-name="orderBy" value="invoiceLineSeqId"/>
+                    <field-map field-name="noConditionFind" value="Y"/>
+                    <field-map field-name="userLogin" from-field="userLogin"/>
+                </service>
+
+                <!-- Poner la lista en el contexto con el nombre que usa tu form -->
+                <script location="component://invoice/scripts/computeInvoiceTotals.groovy"/>
             </actions>
+
             <widgets>
                 <decorator-screen name="InvoiceCommonDecorator" location="component://invoice/widget/CommonScreens.xml">
                     <decorator-section name="body">
-                        <container>
-                            <link text="${uiLabelMap.CommonPrint}" style="buttontext" target="javascript:window.print();" url-mode="plain"/>
-                        </container>
+
+                        <!-- Si NO existe la factura -->
                         <section>
+                            <condition>
+                                <if-empty field="invoice"/>
+                            </condition>
                             <widgets>
-                                <include-screen name="ViewInvoiceBody"/>
+                                <label style="required-field" text="Invoice not found"/>
+                                <container>
+                                    <link target="findInvoices" text="${uiLabelMap.CommonBack}" style="buttontext"/>
+                                </container>
                             </widgets>
                         </section>
+
+                        <!-- Si SÍ existe la factura -->
+                        <section>
+                            <condition>
+                                <not><if-empty field="invoice"/></not>
+                            </condition>
+                            <widgets>
+                                <container>
+                                    <link text="${uiLabelMap.CommonPrint}" style="buttontext"
+                                          target="javascript:window.print();" url-mode="plain"/>
+                                </container>
+
+                                <!-- Form de detalle: usa default-map-name="invoice" -->
+                                <include-form location="component://invoice/widget/forms/InvoiceForms.xml"
+                                              name="ViewInvoiceForm"/>
+
+                                <!-- Cuando tengas líneas, podrás incluir su lista aquí -->
+                                <label text="Invoice Line Items" style="h3"/>
+                                <include-form location="component://invoice/widget/forms/InvoiceForms.xml" name="ListInvoiceLines"/>
+
+                                <!-- Fila de totales -->
+                                <include-form location="component://invoice/widget/forms/InvoiceForms.xml"
+                                              name="InvoiceLinesTotals"/>
+
+                                <container>
+                                    <link target="findInvoices" text="${uiLabelMap.CommonBack}" style="buttontext"/>
+                                </container>
+
+                            </widgets>
+                        </section>
+
                     </decorator-section>
                 </decorator-screen>
             </widgets>
         </section>
     </screen>
 
-    <screen name="ViewInvoiceBody">
-        <section>
-            <widgets>
-                <label text="Invoice Details"/>
-                <include-form name="ViewInvoiceForm" location="component://invoice/widget/forms/InvoiceForms.xml"/>
-            </widgets>
-        </section>
-    </screen>
-
-    <!-- Pantalla para editar línea de factura -->
+    <!-- ======================== -->
+    <!-- Pantalla: editar la línea -->
+    <!-- ======================== -->
     <screen name="EditInvoiceLine">
         <section>
             <actions>
+                <property-map resource="InvoiceUiLabels" map-name="uiLabelMap" global="true"/>
                 <set field="titleProperty" value="EditInvoiceLine"/>
-                <set field="mainDecoratorLocation" value="component://invoice/widget/CommonScreens.xml"/>
             </actions>
             <widgets>
                 <decorator-screen name="InvoiceCommonDecorator" location="component://invoice/widget/CommonScreens.xml">

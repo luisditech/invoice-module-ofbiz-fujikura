@@ -2,24 +2,38 @@
 <simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-simple-methods.xsd">
 
+    <!-- ========================= -->
+    <!-- FinInvoice - CREATE       -->
+    <!-- ========================= -->
     <simple-method method-name="createFinInvoice" short-description="Create FinInvoice">
-        <check-permission service-name="invoiceGenericPermission" main-action="CREATE"
-                          permission-attribute-name="hasPermission"/>
+        <check-permission service-name="invoiceGenericPermission" main-action="CREATE" permission-attribute-name="hasPermission"/>
         <if-empty field="hasPermission">
             <return response-code="fail" message="No permission to create FinInvoice."/>
         </if-empty>
 
         <make-value entity-name="FinInvoice" value-field="newFinInvoice"/>
         <set-nonpk-fields map="parameters" value-field="newFinInvoice"/>
+
+        <!-- Si no viene invoiceId, lo generamos -->
+        <if-empty field="newFinInvoice.invoiceId">
+            <sequenced-id-to-field entity-name="FinInvoice" field="newFinInvoice.invoiceId"/>
+        </if-empty>
+
+        <!-- Normaliza flags Y/N si te llegan booleanos o vacío -->
+        <if-empty field="newFinInvoice.invConfirmed"><set field="newFinInvoice.invConfirmed" value="N"/></if-empty>
+        <if-empty field="newFinInvoice.invPaymentDone"><set field="newFinInvoice.invPaymentDone" value="N"/></if-empty>
+
         <create-value value-field="newFinInvoice"/>
         <field-to-result field="newFinInvoice.invoiceId" result-name="invoiceId"/>
         <log level="info" message="FinInvoice created with ID: ${invoiceId}"/>
         <return response-code="success"/>
     </simple-method>
 
+    <!-- ========================= -->
+    <!-- FinInvoice - UPDATE       -->
+    <!-- ========================= -->
     <simple-method method-name="updateFinInvoice" short-description="Update FinInvoice">
-        <check-permission service-name="invoiceGenericPermission" main-action="UPDATE"
-                          permission-attribute-name="hasPermission"/>
+        <check-permission service-name="invoiceGenericPermission" main-action="UPDATE" permission-attribute-name="hasPermission"/>
         <if-empty field="hasPermission">
             <return response-code="fail" message="No permission to update FinInvoice."/>
         </if-empty>
@@ -31,19 +45,23 @@
             <return response-code="fail" message="FinInvoice with ID ${parameters.invoiceId} not found."/>
         </if-empty>
         <first-from-list list="finInvoices" entry="finInvoiceToUpdate"/>
+
         <set-nonpk-fields map="parameters" value-field="finInvoiceToUpdate"/>
         <store-value value-field="finInvoiceToUpdate"/>
         <log level="info" message="FinInvoice with ID: ${parameters.invoiceId} updated."/>
         <return response-code="success"/>
     </simple-method>
 
+    <!-- ========================= -->
+    <!-- FinInvoice - DELETE (cascade lines) -->
+    <!-- ========================= -->
     <simple-method method-name="deleteFinInvoice" short-description="Delete FinInvoice">
-        <check-permission service-name="invoiceGenericPermission" main-action="DELETE"
-                          permission-attribute-name="hasPermission"/>
+        <check-permission service-name="invoiceGenericPermission" main-action="DELETE" permission-attribute-name="hasPermission"/>
         <if-empty field="hasPermission">
             <return response-code="fail" message="No permission to delete FinInvoice."/>
         </if-empty>
 
+        <!-- Busca cabecera -->
         <entity-and entity-name="FinInvoice" list="finInvoices" use-iterator="false">
             <field-map field-name="invoiceId" from-field="parameters.invoiceId"/>
         </entity-and>
@@ -51,16 +69,38 @@
             <return response-code="fail" message="FinInvoice with ID ${parameters.invoiceId} not found for deletion."/>
         </if-empty>
         <first-from-list list="finInvoices" entry="finInvoiceToDelete"/>
+
+        <!-- Borrado en cascada: elimina líneas primero -->
+        <entity-and entity-name="FinInvoiceLine" list="finInvoiceLines" use-iterator="false">
+            <field-map field-name="invoiceId" from-field="parameters.invoiceId"/>
+        </entity-and>
+        <if-not-empty field="finInvoiceLines">
+            <remove-by-and entity-name="FinInvoiceLine">
+                <field-map field-name="invoiceId" from-field="parameters.invoiceId"/>
+            </remove-by-and>
+        </if-not-empty>
+
+        <!-- Elimina cabecera -->
         <remove-value value-field="finInvoiceToDelete"/>
-        <log level="info" message="FinInvoice with ID: ${parameters.invoiceId} deleted."/>
+        <log level="info" message="FinInvoice with ID: ${parameters.invoiceId} and its lines deleted."/>
         <return response-code="success"/>
     </simple-method>
 
+    <!-- ========================= -->
+    <!-- FinInvoiceLine - CREATE   -->
+    <!-- ========================= -->
     <simple-method method-name="createFinInvoiceLine" short-description="Create FinInvoiceLine">
-        <check-permission service-name="invoiceGenericPermission" main-action="CREATE"
-                          permission-attribute-name="hasPermission"/>
+        <check-permission service-name="invoiceGenericPermission" main-action="CREATE" permission-attribute-name="hasPermission"/>
         <if-empty field="hasPermission">
             <return response-code="fail" message="No permission to create FinInvoiceLine."/>
+        </if-empty>
+
+        <!-- Verifica que exista la cabecera -->
+        <entity-and entity-name="FinInvoice" list="hdrList" use-iterator="false">
+            <field-map field-name="invoiceId" from-field="parameters.invoiceId"/>
+        </entity-and>
+        <if-empty field="hdrList">
+            <return response-code="fail" message="FinInvoice ${parameters.invoiceId} not found. Cannot create line."/>
         </if-empty>
 
         <make-value entity-name="FinInvoiceLine" value-field="newFinInvoiceLine"/>
@@ -76,9 +116,11 @@
         <return response-code="success"/>
     </simple-method>
 
+    <!-- ========================= -->
+    <!-- FinInvoiceLine - UPDATE   -->
+    <!-- ========================= -->
     <simple-method method-name="updateFinInvoiceLine" short-description="Update FinInvoiceLine">
-        <check-permission service-name="invoiceGenericPermission" main-action="UPDATE"
-                          permission-attribute-name="hasPermission"/>
+        <check-permission service-name="invoiceGenericPermission" main-action="UPDATE" permission-attribute-name="hasPermission"/>
         <if-empty field="hasPermission">
             <return response-code="fail" message="No permission to update FinInvoiceLine."/>
         </if-empty>
@@ -97,9 +139,11 @@
         <return response-code="success"/>
     </simple-method>
 
+    <!-- ========================= -->
+    <!-- FinInvoiceLine - DELETE   -->
+    <!-- ========================= -->
     <simple-method method-name="deleteFinInvoiceLine" short-description="Delete FinInvoiceLine">
-        <check-permission service-name="invoiceGenericPermission" main-action="DELETE"
-                          permission-attribute-name="hasPermission"/>
+        <check-permission service-name="invoiceGenericPermission" main-action="DELETE" permission-attribute-name="hasPermission"/>
         <if-empty field="hasPermission">
             <return response-code="fail" message="No permission to delete FinInvoiceLine."/>
         </if-empty>

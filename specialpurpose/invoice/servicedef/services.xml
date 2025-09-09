@@ -1,173 +1,23 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-          xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/ofbiz-service.xsd">
+          xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
 
-    <description>FIN Invoice Services</description>
+    <description>FIN Invoice Services (base)</description>
     <version>1.0</version>
 
-    <service name="createFinInvoice" engine="simple"
-             location="component://invoice/minilang/InvoiceServices.xml" invoke="createFinInvoice" auth="true">
-        <description>Creates a FinInvoice record</description>
-        <auto-attributes entity-name="FinInvoice" include="nonpk" mode="IN"/>
-        <auto-attributes entity-name="FinInvoice" include="pk" mode="OUT"/>
-        <override name="invoiceId" mode="OUT" optional="false"/>
-        <permission-service service-name="invoiceGenericPermission" main-action="CREATE"/>
+    <!-- Dummy para evitar archivo vacío -->
+    <service name="noSyntaxError" engine="interface">
+        <description>Placeholder</description>
     </service>
 
-    <service name="updateFinInvoice" engine="simple"
-             location="component://invoice/minilang/InvoiceServices.xml" invoke="updateFinInvoice" auth="true">
-        <description>Updates a FinInvoice record</description>
-        <auto-attributes entity-name="FinInvoice" include="pk" mode="IN"/>
-        <auto-attributes entity-name="FinInvoice" include="nonpk" mode="IN" optional="true"/>
-        <permission-service service-name="invoiceGenericPermission" main-action="UPDATE"/>
-    </service>
-
-    <service name="deleteFinInvoice" engine="simple"
-             location="component://invoice/minilang/InvoiceServices.xml" invoke="deleteFinInvoice" auth="true">
-        <description>Deletes a FinInvoice record</description>
-        <auto-attributes entity-name="FinInvoice" include="pk" mode="IN"/>
-        <permission-service service-name="invoiceGenericPermission" main-action="DELETE"/>
-    </service>
-
-    <service name="findFinInvoices" engine="entity-auto" entity-name="FinInvoice" method-name="find" auth="true">
-        <description>Finds FinInvoice records</description>
-
-        <attribute name="invSupplierVatNumber" type="String" mode="IN" optional="true"/>
-        <attribute name="invSupplierName" type="String" mode="IN" optional="true"/>
-        <attribute name="invSupplierCode" type="String" mode="IN" optional="true"/>
-        <attribute name="invInvoiceNumber" type="String" mode="IN" optional="true"/>
-
-        <attribute name="invInvoiceDateFrom" type="java.sql.Timestamp" mode="IN" optional="true"/>
-        <attribute name="invInvoiceDateTo" type="java.sql.Timestamp" mode="IN" optional="true"/>
-        <attribute name="invValueDateFrom" type="java.sql.Timestamp" mode="IN" optional="true"/>
-        <attribute name="invValueDateTo" type="java.sql.Timestamp" mode="IN" optional="true"/>
-        <attribute name="invPaymentDueDateFrom" type="java.sql.Timestamp" mode="IN" optional="true"/>
-        <attribute name="invPaymentDueDateTo" type="java.sql.Timestamp" mode="IN" optional="true"/>
-
-        <attribute name="invTaxType" type="String" mode="IN" optional="true"/>
-        <attribute name="invTaxRate" type="String" mode="IN" optional="true"/>
-        <attribute name="invCurrency" type="String" mode="IN" optional="true"/>
-        <attribute name="invPaymentMethod" type="String" mode="IN" optional="true"/>
-        <attribute name="invNetAmountFrom" type="String" mode="IN" optional="true"/>
-        <attribute name="invNetAmountTo" type="String" mode="IN" optional="true"/>
-        <attribute name="invConfirmed" type="String" mode="IN" optional="true"/>
-        <attribute name="invPaymentDone" type="String" mode="IN" optional="true"/>
-
-        <attribute name="listIt" type="Boolean" mode="IN" default-value="true"/>
-        <attribute name="entityList" type="java.util.List" mode="OUT"/>
-        <attribute name="entityListIterator" type="org.apache.ofbiz.entity.util.EntityListIterator" mode="OUT"/>
-
-        <permission-service service-name="invoiceGenericPermission" main-action="VIEW"/>
-    </service>
-
-    <service name="createFinInvoiceLine" engine="simple"
-             location="component://invoice/minilang/InvoiceServices.xml" invoke="createFinInvoiceLine" auth="true">
-        <description>Creates a FinInvoiceLine record</description>
-        <auto-attributes entity-name="FinInvoiceLine" include="nonpk" mode="IN"/>
-        <auto-attributes entity-name="FinInvoiceLine" include="pk" mode="INOUT"/>
-        <permission-service service-name="invoiceGenericPermission" main-action="CREATE"/>
-    </service>
-
-    <service name="updateFinInvoiceLine" engine="simple"
-             location="component://invoice/minilang/InvoiceServices.xml" invoke="updateFinInvoiceLine" auth="true">
-        <description>Updates a FinInvoiceLine record</description>
-        <auto-attributes entity-name="FinInvoiceLine" include="pk" mode="IN"/>
-        <auto-attributes entity-name="FinInvoiceLine" include="nonpk" mode="IN" optional="true"/>
-        <permission-service service-name="invoiceGenericPermission" main-action="UPDATE"/>
-    </service>
-
-    <service name="deleteFinInvoiceLine" engine="simple"
-             location="component://invoice/minilang/InvoiceServices.xml" invoke="deleteFinInvoiceLine" auth="true">
-        <description>Deletes a FinInvoiceLine record</description>
-        <auto-attributes entity-name="FinInvoiceLine" include="pk" mode="IN"/>
-        <permission-service service-name="invoiceGenericPermission" main-action="DELETE"/>
-    </service>
-
-    <service name="findFinInvoiceLines" engine="entity-auto" entity-name="FinInvoiceLine" method-name="find" auth="true">
-        <description>Finds FinInvoiceLine records</description>
-        <attribute name="invoiceId" type="String" mode="IN" optional="true"/>
-        <attribute name="invoiceLineSeqId" type="String" mode="IN" optional="true"/>
-        <attribute name="listIt" type="Boolean" mode="IN" default-value="true"/>
-        <attribute name="entityList" type="java.util.List" mode="OUT"/>
-        <attribute name="entityListIterator" type="org.apache.ofbiz.entity.util.EntityListIterator" mode="OUT"/>
-        <permission-service service-name="invoiceGenericPermission" main-action="VIEW"/>
-    </service>
-
+    <!-- Permisos (lo conservamos tal cual lo tenías) -->
     <service name="invoiceGenericPermission" engine="java"
-             location="org.apache.ofbiz.invoice.permission.InvoicePermissionServices" invoke="checkInvoicePermission">
+             location="org.apache.ofbiz.invoice.permission.InvoicePermissionServices"
+             invoke="checkInvoicePermission">
         <description>Invoice Component Generic Permission Service</description>
         <attribute name="mainAction" type="String" mode="IN" optional="false"/>
         <attribute name="permission" type="String" mode="OUT"/>
         <attribute name="failMessage" type="String" mode="OUT"/>
-    </service>
-
-    <!-- MOCK -->
-    <service name="findFinInvoicesMocked" engine="java"
-             location="org.apache.ofbiz.invoice.mock.InvoiceMockWorker"
-             invoke="getMockedInvoices" auth="false">
-        <description>Returns mocked invoices</description>
-        <attribute name="invSupplierVatNumber" type="String" mode="IN" optional="true"/>
-        <attribute name="invSupplierName" type="String" mode="IN" optional="true"/>
-        <attribute name="invSupplierCode" type="String" mode="IN" optional="true"/>
-        <attribute name="invInvoiceNumber" type="String" mode="IN" optional="true"/>
-
-        <attribute name="invInvoiceDateFrom" type="java.sql.Timestamp" mode="IN" optional="true"/>
-        <attribute name="invInvoiceDateTo" type="java.sql.Timestamp" mode="IN" optional="true"/>
-        <attribute name="invValueDateFrom" type="java.sql.Timestamp" mode="IN" optional="true"/>
-        <attribute name="invValueDateTo" type="java.sql.Timestamp" mode="IN" optional="true"/>
-        <attribute name="invPaymentDueDateFrom" type="java.sql.Timestamp" mode="IN" optional="true"/>
-        <attribute name="invPaymentDueDateTo" type="java.sql.Timestamp" mode="IN" optional="true"/>
-
-        <attribute name="invTaxType" type="String" mode="IN" optional="true"/>
-        <attribute name="invTaxRate" type="String" mode="IN" optional="true"/>
-        <attribute name="invCurrency" type="String" mode="IN" optional="true"/>
-        <attribute name="invPaymentMethod" type="String" mode="IN" optional="true"/>
-        <attribute name="invNetAmountFrom" type="String" mode="IN" optional="true"/>
-        <attribute name="invNetAmountTo" type="String" mode="IN" optional="true"/>
-        <attribute name="invConfirmed" type="String" mode="IN" optional="true"/>
-        <attribute name="invPaymentDone" type="String" mode="IN" optional="true"/>
-
-        <attribute name="listIt" type="Boolean" mode="IN" default-value="true"/>
-        <attribute name="entityList" type="java.util.List" mode="OUT"/>
-    </service>
-
-    <service name="getInvoiceDetailData" engine="java"
-             location="org.apache.ofbiz.invoice.mock.InvoiceMockWorker"
-             invoke="getInvoiceDetailData" auth="true">
-        <description>Fetch Invoice detail from mock data</description>
-        <!-- Parámetro de entrada -->
-        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
-
-        <!-- Todos los parámetros que devuelves en el result.put(...) -->
-        <attribute name="invAccountingCurrency" type="String" mode="OUT"/>
-        <attribute name="invAmountWithoutVat" type="BigDecimal" mode="OUT"/>
-        <attribute name="invCompany" type="String" mode="OUT"/>
-        <attribute name="invConfirmed" type="String" mode="OUT"/>
-        <attribute name="invCountry" type="String" mode="OUT"/>
-        <attribute name="invCurrency" type="String" mode="OUT"/>
-        <attribute name="invDocumentTypeCode" type="String" mode="OUT"/>
-        <attribute name="invExchangeRate" type="BigDecimal" mode="OUT"/>
-        <attribute name="invInvoiceDate" type="Timestamp" mode="OUT"/>
-        <attribute name="invInvoiceNumber" type="String" mode="OUT"/>
-        <attribute name="invIrpf" type="BigDecimal" mode="OUT"/>
-        <attribute name="invIva" type="BigDecimal" mode="OUT"/>
-        <attribute name="invNetAmount" type="BigDecimal" mode="OUT"/>
-        <attribute name="invPaymentDone" type="String" mode="OUT"/>
-        <attribute name="invPaymentDueDate" type="Timestamp" mode="OUT"/>
-        <attribute name="invPaymentMethod" type="String" mode="OUT"/>
-        <attribute name="invProof" type="String" mode="OUT"/>
-        <attribute name="invSupplierCode" type="String" mode="OUT"/>
-        <attribute name="invSupplierName" type="String" mode="OUT"/>
-        <attribute name="invSupplierVatNumber" type="String" mode="OUT"/>
-        <attribute name="invTaxType" type="String" mode="OUT"/>
-        <attribute name="invTotalAmountWithVat" type="BigDecimal" mode="OUT"/>
-        <attribute name="invTotalCharges" type="BigDecimal" mode="OUT"/>
-        <attribute name="invTotalDiscounts" type="BigDecimal" mode="OUT"/>
-        <attribute name="invTotalVatAmount" type="BigDecimal" mode="OUT"/>
-        <attribute name="invUuid" type="String" mode="OUT"/>
-        <attribute name="invValueDate" type="Timestamp" mode="OUT"/>
-        <attribute name="invTotalVatAmountInAccountingCurrency" type="BigDecimal" mode="OUT" optional="true"/>
-        <attribute name="invoiceId" type="String" mode="OUT"/>
     </service>
 
 </services>

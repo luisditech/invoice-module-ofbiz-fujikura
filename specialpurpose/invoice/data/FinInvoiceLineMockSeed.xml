@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+
+    <!-- Líneas de la factura MOCK_INV_001 -->
+    <FinInvoiceLine invoiceId="MOCK_INV_001" invoiceLineSeqId="00001"
+                    lineCompany="DEMO" lineSupplierVatNumber="ES12345678A" lineInvoiceNumber="INV-2023-001"
+                    lineLineId="1" lineName="Laptop Pro" lineArticleCodeBySeller="LP-PR-001"
+                    lineQuantity="1" lineMeasurementUnit="Units" lineUnitPrice="1200.00"
+                    lineDeliveryNote="DN-2023-001"
+                    lineTaxType="IVA" lineTaxRate="21.00"
+                    lineNetAmount="1200.00" lineTotalVatAmount="252.00" lineTotalAmountWithVat="1452.00"
+                    lineProof="P123456" lineCc="CC001" lineBranch="Main" lineProject="Project Alpha"
+                    lineAccountingCurrency="EUR" lineCurrencyExchange="1.00"/>
+
+    <FinInvoiceLine invoiceId="MOCK_INV_001" invoiceLineSeqId="00002"
+                    lineCompany="DEMO" lineSupplierVatNumber="ES12345678A" lineInvoiceNumber="INV-2023-001"
+                    lineLineId="2" lineName="Wireless Mouse" lineArticleCodeBySeller="WM-ER-005"
+                    lineQuantity="2" lineMeasurementUnit="Units" lineUnitPrice="25.00"
+                    lineDeliveryNote="DN-2023-001"
+                    lineTaxType="IVA" lineTaxRate="21.00"
+                    lineNetAmount="50.00" lineTotalVatAmount="10.50" lineTotalAmountWithVat="60.50"
+                    lineProof="P789012" lineCc="CC001" lineBranch="Main" lineProject="Project Alpha"
+                    lineAccountingCurrency="EUR" lineCurrencyExchange="1.00"/>
+
+    <FinInvoiceLine invoiceId="MOCK_INV_001" invoiceLineSeqId="00003"
+                    lineCompany="DEMO" lineSupplierVatNumber="ES12345678A" lineInvoiceNumber="INV-2023-001"
+                    lineLineId="3" lineName="Monitor 27 inch" lineArticleCodeBySeller="MON-27-ABC"
+                    lineQuantity="1" lineMeasurementUnit="Units" lineUnitPrice="300.00"
+                    lineDeliveryNote="DN-2023-002"
+                    lineTaxType="IVA" lineTaxRate="21.00"
+                    lineNetAmount="300.00" lineTotalVatAmount="63.00" lineTotalAmountWithVat="363.00"
+                    lineProof="P345678" lineCc="CC002" lineBranch="North" lineProject="Project Beta"
+                    lineAccountingCurrency="EUR" lineCurrencyExchange="1.00"/>
+
+    <FinInvoiceLine invoiceId="MOCK_INV_001" invoiceLineSeqId="00004"
+                    lineCompany="DEMO" lineSupplierVatNumber="ES12345678A" lineInvoiceNumber="INV-2023-001"
+                    lineLineId="4" lineName="USB-C Hub" lineArticleCodeBySeller="USB-HUB-XYZ"
+                    lineQuantity="3" lineMeasurementUnit="Units" lineUnitPrice="35.00"
+                    lineDeliveryNote="DN-2023-003"
+                    lineTaxType="IVA" lineTaxRate="21.00"
+                    lineNetAmount="105.00" lineTotalVatAmount="22.05" lineTotalAmountWithVat="127.05"
+                    lineProof="P901234" lineCc="CC003" lineBranch="Main" lineProject="Project Gamma"
+                    lineAccountingCurrency="EUR" lineCurrencyExchange="1.00"/>
+
+    <FinInvoiceLine invoiceId="MOCK_INV_001" invoiceLineSeqId="00005"
+                    lineCompany="DEMO" lineSupplierVatNumber="ES12345678A" lineInvoiceNumber="INV-2023-001"
+                    lineLineId="5" lineName="External SSD 1TB" lineArticleCodeBySeller="SSD-1TB-FAST"
+                    lineQuantity="1" lineMeasurementUnit="Units" lineUnitPrice="90.00"
+                    lineDeliveryNote="DN-2023-003"
+                    lineTaxType="IVA" lineTaxRate="21.00"
+                    lineNetAmount="90.00" lineTotalVatAmount="18.90" lineTotalAmountWithVat="108.90"
+                    lineProof="P567890" lineCc="CC003" lineBranch="Main" lineProject="Project Gamma"
+                    lineAccountingCurrency="EUR" lineCurrencyExchange="1.00"/>
+
+    <FinInvoiceLine invoiceId="MOCK_INV_001" invoiceLineSeqId="00006"
+                    lineCompany="DEMO" lineSupplierVatNumber="ES12345678A" lineInvoiceNumber="INV-2023-001"
+                    lineLineId="6" lineName="Ergonomic Keyboard" lineArticleCodeBySeller="KBD-ERG-01"
+                    lineQuantity="1" lineMeasurementUnit="Units" lineUnitPrice="70.00"
+                    lineDeliveryNote="DN-2023-004"
+                    lineTaxType="IVA" lineTaxRate="21.00"
+                    lineNetAmount="70.00" lineTotalVatAmount="14.70" lineTotalAmountWithVat="84.70"
+                    lineProof="P112233" lineCc="CC004" lineBranch="South" lineProject="Internal IT"
+                    lineAccountingCurrency="EUR" lineCurrencyExchange="1.00"/>
+
+    <FinInvoiceLine invoiceId="MOCK_INV_001" invoiceLineSeqId="00007"
+                    lineCompany="DEMO" lineSupplierVatNumber="ES12345678A" lineInvoiceNumber="INV-2023-001"
+                    lineLineId="7" lineName="Webcam Full HD" lineArticleCodeBySeller="WBC-HD-V2"
+                    lineQuantity="1" lineMeasurementUnit="Units" lineUnitPrice="55.00"
+                    lineDeliveryNote="DN-2023-004"
+                    lineTaxType="IVA" lineTaxRate="21.00"
+                    lineNetAmount="55.00" lineTotalVatAmount="11.55" lineTotalAmountWithVat="66.55"
+                    lineProof="P223344" lineCc="CC004" lineBranch="South" lineProject="Internal IT"
+                    lineAccountingCurrency="EUR" lineCurrencyExchange="1.00"/>
+
+    <FinInvoiceLine invoiceId="MOCK_INV_001" invoiceLineSeqId="00008"
+                    lineCompany="DEMO" lineSupplierVatNumber="ES12345678A" lineInvoiceNumber="INV-2023-001"
+                    lineLineId="8" lineName="Router Wi-Fi 6" lineArticleCodeBySeller="RTR-WF6-AX"
+                    lineQuantity="1" lineMeasurementUnit="Units" lineUnitPrice="110.00"
+                    lineDeliveryNote="DN-2023-005"
+                    lineTaxType="IVA" lineTaxRate="21.00"
+                    lineNetAmount="110.00" lineTotalVatAmount="23.10" lineTotalAmountWithVat="133.10"
+                    lineProof="P334455" lineCc="CC005" lineBranch="Main" lineProject="Network Upgrade"
+                    lineAccountingCurrency="EUR" lineCurrencyExchange="1.00"/>
+
+    <FinInvoiceLine invoiceId="MOCK_INV_001" invoiceLineSeqId="00009"
+                    lineCompany="DEMO" lineSupplierVatNumber="ES12345678A" lineInvoiceNumber="INV-2023-001"
+                    lineLineId="9" lineName="Network Cable (10m)" lineArticleCodeBySeller="NWC-CAT6-10M"
+                    lineQuantity="5" lineMeasurementUnit="Meters" lineUnitPrice="8.00"
+                    lineDeliveryNote="DN-2023-005"
+                    lineTaxType="IVA" lineTaxRate="21.00"
+                    lineNetAmount="40.00" lineTotalVatAmount="8.40" lineTotalAmountWithVat="48.40"
+                    lineProof="P445566" lineCc="CC005" lineBranch="Main" lineProject="Network Upgrade"
+                    lineAccountingCurrency="EUR" lineCurrencyExchange="1.00"/>
+
+    <FinInvoiceLine invoiceId="MOCK_INV_001" invoiceLineSeqId="00010"
+                    lineCompany="DEMO" lineSupplierVatNumber="ES12345678A" lineInvoiceNumber="INV-2023-001"
+                    lineLineId="10" lineName="Software License (Annual)" lineArticleCodeBySeller="SWL-AN-PRO"
+                    lineQuantity="1" lineMeasurementUnit="License" lineUnitPrice="250.00"
+                    lineDeliveryNote="DN-2023-006"
+                    lineTaxType="IVA" lineTaxRate="21.00"
+                    lineNetAmount="250.00" lineTotalVatAmount="52.50" lineTotalAmountWithVat="302.50"
+                    lineProof="P556677" lineCc="CC006" lineBranch="East" lineProject="Software Rollout"
+                    lineAccountingCurrency="EUR" lineCurrencyExchange="1.00"/>
+
+</entity-engine-xml>

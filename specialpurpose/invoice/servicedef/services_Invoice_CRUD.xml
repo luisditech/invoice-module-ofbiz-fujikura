@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
+
+    <!-- ======================= -->
+    <!-- FinInvoice (cabecera)   -->
+    <!-- ======================= -->
+
+    <service name="createFinInvoice"
+             engine="simple"
+             location="component://invoice/minilang/InvoiceServices.xml"
+             invoke="createFinInvoice"
+             auth="true">
+        <description>Create FinInvoice</description>
+        <!-- IN: todos los non-pk de FinInvoice -->
+        <auto-attributes include="nonpk" entity-name="FinInvoice" mode="IN"/>
+        <!-- OUT: id generado -->
+        <attribute name="invoiceId" type="String" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="updateFinInvoice"
+             engine="simple"
+             location="component://invoice/minilang/InvoiceServices.xml"
+             invoke="updateFinInvoice"
+             auth="true">
+        <description>Update FinInvoice</description>
+        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" entity-name="FinInvoice" mode="IN"/>
+    </service>
+
+    <service name="deleteFinInvoice"
+             engine="simple"
+             location="component://invoice/minilang/InvoiceServices.xml"
+             invoke="deleteFinInvoice"
+             auth="true">
+        <description>Delete FinInvoice</description>
+        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
+    </service>
+
+    <!-- ======================= -->
+    <!-- FinInvoiceLine (líneas) -->
+    <!-- ======================= -->
+
+    <service name="createFinInvoiceLine"
+             engine="simple"
+             location="component://invoice/minilang/InvoiceServices.xml"
+             invoke="createFinInvoiceLine"
+             auth="true">
+        <description>Create FinInvoiceLine</description>
+        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" entity-name="FinInvoiceLine" mode="IN"/>
+        <attribute name="invoiceLineSeqId" type="String" mode="OUT" optional="true"/>
+    </service>
+
+    <service name="updateFinInvoiceLine"
+             engine="simple"
+             location="component://invoice/minilang/InvoiceServices.xml"
+             invoke="updateFinInvoiceLine"
+             auth="true">
+        <description>Update FinInvoiceLine</description>
+        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
+        <attribute name="invoiceLineSeqId" type="String" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" entity-name="FinInvoiceLine" mode="IN"/>
+    </service>
+
+    <service name="deleteFinInvoiceLine"
+             engine="simple"
+             location="component://invoice/minilang/InvoiceServices.xml"
+             invoke="deleteFinInvoiceLine"
+             auth="true">
+        <description>Delete FinInvoiceLine</description>
+        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
+        <attribute name="invoiceLineSeqId" type="String" mode="IN" optional="false"/>
+    </service>
+
+</services>

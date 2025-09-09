@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<simple-methods xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/simple-methods.xsd">
+
+    <!-- =============================== -->
+    <!-- findFinInvoicesDb               -->
+    <!-- =============================== -->
+    <simple-method method-name="findFinInvoicesDb" short-description="Find FinInvoice from DB">
+        <make-value entity-name="FinInvoice" value-name="tmp"/>
+
+        <!-- Construcción de condiciones dinámicas -->
+        <entity-condition value-name="cond">
+            <condition-list combine="and">
+
+                <!-- Texto: contains (like), ignore-case -->
+                <condition-expr field-name="invSupplierVatNumber" operator="like" ignore-case="true" >
+                    <field-value value="%${invSupplierVatNumber}%"/>
+                </condition-expr>
+                <condition-expr field-name="invSupplierName" operator="like" ignore-case="true">
+                    <field-value value="%${invSupplierName}%"/>
+                </condition-expr>
+                <condition-expr field-name="invSupplierCode" operator="like" ignore-case="true">
+                    <field-value value="%${invSupplierCode}%"/>
+                </condition-expr>
+                <condition-expr field-name="invInvoiceNumber" operator="like" ignore-case="true">
+                    <field-value value="%${invInvoiceNumber}%"/>
+                </condition-expr>
+                <condition-expr field-name="invTaxType" operator="like" ignore-case="true">
+                    <field-value value="%${invTaxType}%"/>
+                </condition-expr>
+                <condition-expr field-name="invCurrency" operator="like" ignore-case="true">
+                    <field-value value="%${invCurrency}%"/>
+                </condition-expr>
+                <condition-expr field-name="invPaymentMethod" operator="like" ignore-case="true">
+                    <field-value value="%${invPaymentMethod}%"/>
+                </condition-expr>
+
+                <!-- Fechas (rangos) -->
+                <condition-list combine="and">
+                    <condition-expr field-name="invInvoiceDate" operator="greater-equals">
+                        <field-value from-field="invInvoiceDateFrom"/>
+                    </condition-expr>
+                    <condition-expr field-name="invInvoiceDate" operator="less-equals">
+                        <field-value from-field="invInvoiceDateTo"/>
+                    </condition-expr>
+                </condition-list>
+
+                <condition-list combine="and">
+                    <condition-expr field-name="invValueDate" operator="greater-equals">
+                        <field-value from-field="invValueDateFrom"/>
+                    </condition-expr>
+                    <condition-expr field-name="invValueDate" operator="less-equals">
+                        <field-value from-field="invValueDateTo"/>
+                    </condition-expr>
+                </condition-list>
+
+                <condition-list combine="and">
+                    <condition-expr field-name="invPaymentDueDate" operator="greater-equals">
+                        <field-value from-field="invPaymentDueDateFrom"/>
+                    </condition-expr>
+                    <condition-expr field-name="invPaymentDueDate" operator="less-equals">
+                        <field-value from-field="invPaymentDueDateTo"/>
+                    </condition-expr>
+                </condition-list>
+
+                <!-- Númericos -->
+                <!-- invIva exacto si viene invTaxRate -->
+                <condition-expr field-name="invIva" operator="equals">
+                    <field-value value="${invTaxRate}"/>
+                </condition-expr>
+
+                <condition-expr field-name="invNetAmount" operator="greater-equals">
+                    <field-value value="${invNetAmountFrom}"/>
+                </condition-expr>
+                <condition-expr field-name="invNetAmount" operator="less-equals">
+                    <field-value value="${invNetAmountTo}"/>
+                </condition-expr>
+
+                <!-- Y/N -->
+                <condition-expr field-name="invConfirmed" operator="equals">
+                    <field-value from-field="invConfirmed"/>
+                </condition-expr>
+                <condition-expr field-name="invPaymentDone" operator="equals">
+                    <field-value from-field="invPaymentDone"/>
+                </condition-expr>
+
+            </condition-list>
+        </entity-condition>
+
+        <!-- entity-find con condicional de iterator vs lista -->
+        <if-empty field="listIt">
+            <set field="listIt" value="true"/>
+        </if-empty>
+
+        <if-compare field="listIt" operator="equals" value="true">
+            <entity-find entity-name="FinInvoice" list="entityListIterator" use-iterator="true" distinct="false">
+                <order-by field-name="-invInvoiceDate"/>
+                <order-by field-name="invInvoiceNumber"/>
+                <entity-condition entity-condition-name="cond"/>
+            </entity-find>
+            <else>
+                <entity-find entity-name="FinInvoice" list="entityList">
+                    <order-by field-name="-invInvoiceDate"/>
+                    <order-by field-name="invInvoiceNumber"/>
+                    <entity-condition entity-condition-name="cond"/>
+                </entity-find>
+            </else>
+        </if-compare>
+
+        <return/>
+    </simple-method>
+
+    <!-- =============================== -->
+    <!-- getInvoiceDetailDataDb          -->
+    <!-- =============================== -->
+    <simple-method method-name="getInvoiceDetailDataDb" short-description="Invoice detail by invoiceId (or invInvoiceNumber fallback)">
+        <!-- 1) Try by invoiceId -->
+        <entity-one entity-name="FinInvoice" value-field="inv" auto-field-map="false">
+            <field-map field-name="invoiceId" from-field="invoiceId"/>
+        </entity-one>
+
+        <!-- 2) If not found, try by invInvoiceNumber == invoiceId (compatibilidad con mock) -->
+        <if-empty field="inv">
+            <entity-find entity-name="FinInvoice" list="tmpList">
+                <condition-expr field-name="invInvoiceNumber" operator="equals">
+                    <field-value from-field="invoiceId"/>
+                </condition-expr>
+            </entity-find>
+            <if-not-empty field="tmpList">
+                <first-from-list list="tmpList" entry="inv"/>
+            </if-not-empty>
+        </if-empty>
+
+        <if-empty field="inv">
+            <add-error message="Invoice not found"/>
+            <return error="true"/>
+        </if-empty>
+
+        <!-- Mapear OUTs uno a uno -->
+        <set field="invAccountingCurrency" from-field="inv.invAccountingCurrency"/>
+        <set field="invAmountWithoutVat" from-field="inv.invAmountWithoutVat"/>
+        <set field="invCompany" from-field="inv.invCompany"/>
+        <set field="invConfirmed" from-field="inv.invConfirmed"/>
+        <set field="invCountry" from-field="inv.invCountry"/>
+        <set field="invCurrency" from-field="inv.invCurrency"/>
+        <set field="invDocumentTypeCode" from-field="inv.invDocumentTypeCode"/>
+        <set field="invExchangeRate" from-field="inv.invExchangeRate"/>
+        <set field="invInvoiceDate" from-field="inv.invInvoiceDate"/>
+        <set field="invInvoiceNumber" from-field="inv.invInvoiceNumber"/>
+        <set field="invIrpf" from-field="inv.invIrpf"/>
+        <set field="invIva" from-field="inv.invIva"/>
+        <set field="invNetAmount" from-field="inv.invNetAmount"/>
+        <set field="invPaymentDone" from-field="inv.invPaymentDone"/>
+        <set field="invPaymentDueDate" from-field="inv.invPaymentDueDate"/>
+        <set field="invPaymentMethod" from-field="inv.invPaymentMethod"/>
+        <set field="invProof" from-field="inv.invProof"/>
+        <set field="invSupplierCode" from-field="inv.invSupplierCode"/>
+        <set field="invSupplierName" from-field="inv.invSupplierName"/>
+        <set field="invSupplierVatNumber" from-field="inv.invSupplierVatNumber"/>
+        <set field="invTaxType" from-field="inv.invTaxType"/>
+        <set field="invTotalAmountWithVat" from-field="inv.invTotalAmountWithVat"/>
+        <set field="invTotalCharges" from-field="inv.invTotalCharges"/>
+        <set field="invTotalDiscounts" from-field="inv.invTotalDiscounts"/>
+        <set field="invTotalVatAmount" from-field="inv.invTotalVatAmount"/>
+        <set field="invUuid" from-field="inv.invUuid"/>
+        <set field="invValueDate" from-field="inv.invValueDate"/>
+        <set field="invTotalVatAmountInAccountingCurrency" from-field="inv.invTotalVatAmountInAccountingCurrency"/>
+        <set field="invoiceId" from-field="inv.invoiceId"/>
+
+        <return/>
+    </simple-method>
+
+    <!-- =============================== -->
+    <!-- findFinInvoiceLinesDb           -->
+    <!-- =============================== -->
+    <simple-method method-name="findFinInvoiceLinesDb" short-description="Find lines by invoiceId">
+        <if-empty field="invoiceId">
+            <add-error message="Missing invoiceId"/>
+            <return error="true"/>
+        </if-empty>
+
+        <entity-find entity-name="FinInvoiceLine" list="entityList">
+            <condition-expr field-name="invoiceId" operator="equals">
+                <field-value from-field="invoiceId"/>
+            </condition-expr>
+            <order-by field-name="invoiceLineSeqId"/>
+        </entity-find>
+
+        <return/>
+    </simple-method>
+
+</simple-methods>

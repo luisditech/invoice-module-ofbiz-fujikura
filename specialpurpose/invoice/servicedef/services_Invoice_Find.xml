@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<services xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/services.xsd">
+
+    <!-- lista “mock” de facturas -->
+    <service name="findFinInvoicesMocked"
+             engine="simple"
+             location="component://invoice/minilang/InvoiceFindServices.xml"
+             invoke="findFinInvoicesMocked"
+             auth="true">
+        <description>Return mocked invoices list</description>
+        <attribute name="listIt" type="java.util.List" mode="OUT" optional="true"/>
+    </service>
+
+    <!-- detalle de cabecera para la vista -->
+    <service name="getInvoiceDetailData"
+             engine="simple"
+             location="component://invoice/minilang/InvoiceFindServices.xml"
+             invoke="getInvoiceDetailData"
+             auth="true">
+        <description>Get invoice header data for view</description>
+        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
+        <auto-attributes include="nonpk" entity-name="FinInvoice" mode="OUT"/>
+        <attribute name="invInvoiceNumber" type="String" mode="OUT" optional="true"/>
+    </service>
+
+    <!-- líneas por invoiceId -->
+    <service name="findFinInvoiceLines"
+             engine="simple"
+             location="component://invoice/minilang/InvoiceFindServices.xml"
+             invoke="findFinInvoiceLines"
+             auth="true">
+        <description>Find invoice lines by invoiceId</description>
+        <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
+        <attribute name="entityList" type="java.util.List" mode="OUT" optional="true"/>
+    </service>
+
+</services>

@@ -7,21 +7,6 @@
     <menu name="MainAppBar" title="${uiLabelMap.InvoiceManagementTitle}"
           extends="CommonAppBarMenu"
           extends-resource="component://common/widget/CommonMenus.xml">
-        <!--<menu-item name="invoice" title="${uiLabelMap.InvoiceManagementTitle}">
-            <link target="main"/>
-        </menu-item>-->
     </menu>
-
-    <!-- Invoice AppBar
-    <menu name="InvoiceAppBar" title="${uiLabelMap.InvoiceManagementTitle}"
-          extends="CommonAppBarMenu"
-          extends-resource="component://common/widget/CommonMenus.xml">
-        <menu-item name="FindInvoices" title="${uiLabelMap.InvoiceFindInvoiceTitle}">
-            <link target="findInvoices"/>
-        </menu-item>
-        <menu-item name="CreateNewInvoice" title="${uiLabelMap.InvoiceCreateNewInvoice}">
-            <link target="editInvoice"/>
-        </menu-item>
-    </menu>-->
 
 </menus>

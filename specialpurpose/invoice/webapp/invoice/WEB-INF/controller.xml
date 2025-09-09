@@ -3,99 +3,150 @@
            xmlns="http://ofbiz.apache.org/Site-Conf"
            xsi:schemaLocation="http://ofbiz.apache.org/Site-Conf http://ofbiz.apache.org/dtds/site-conf.xsd">
 
+    <!-- The controller elements that are common to all OFBiz components
+         can be found in the following xml file. A component can override the
+         elements found in the common-controller.xml file. -->
     <include location="component://common/webcommon/WEB-INF/common-controller.xml"/>
+
     <description>Invoice Component Site Configuration File</description>
 
-    <!-- Request/View: main -->
+    <!-- Events to run on every request before security (chains exempt) -->
+    <!--
+    <preprocessor>
+    </preprocessor>
+    -->
+
+    <!-- Events to run on every request after all other processing (chains exempt) -->
+    <!--
+    <postprocessor>
+        <event name="test" type="java" path="org.apache.ofbiz.webapp.event.TestEvent" invoke="test"/>
+    </postprocessor>
+    -->
+
+    <!-- **************** -->
+    <!-- **************** -->
+    <!-- Request Mappings -->
+    <!-- **************** -->
+    <!-- **************** -->
+
+    <!-- main -->
     <request-map uri="main">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="main"/>
     </request-map>
-    <view-map name="main" type="screen" page="component://invoice/widget/screens/InvoiceScreens.xml#main"/>
 
-    <!-- Request/View: findInvoices -->
-    <!--<request-map uri="findInvoices">
-        <security https="true" auth="true"/>
-        <response name="success" type="view" value="FindInvoices"/>
-    </request-map>
-    <view-map name="FindInvoices" type="screen" page="component://invoice/widget/screens/InvoiceScreens.xml#main"/>-->
+    <!-- ======= -->
+    <!-- Invoice -->
+    <!-- ======= -->
 
-    <!-- MOCK FIND INVOICES -->
+    <!-- find (búsqueda/listado) -->
+    <!-- Mantiene el target 'findInvoices' usado por el form -->
     <request-map uri="findInvoices">
         <security https="true" auth="true"/>
-        <event type="service" invoke="findFinInvoicesMocked"/>
-        <response name="success" type="view" value="FindInvoices"/>
+        <response name="success" type="view" value="viewFindInvoices"/>
     </request-map>
-    <view-map name="FindInvoices" type="screen" page="component://invoice/widget/screens/InvoiceScreens.xml#main"/>
 
-    <!-- Request/View: viewInvoiceDetail -->
+    <!-- view (detalle) -->
+    <!-- Soporta ambos targets usados en la UI: 'viewInvoiceDetail' y 'viewInvoice' -->
     <request-map uri="viewInvoiceDetail">
         <security https="true" auth="true"/>
-        <event type="service" invoke="getInvoiceDetailData"/>
-        <response name="success" type="view" value="ViewInvoice"/>
+        <response name="success" type="view" value="ViewInvoiceDetail"/>
     </request-map>
-    <view-map name="ViewInvoice" type="screen" page="component://invoice/widget/screens/InvoiceScreens.xml#ViewInvoice"/>
+    <view-map name="ViewInvoiceDetail" type="screen"
+              page="component://invoice/widget/screens/InvoiceScreens.xml#ViewInvoiceHeader"/>
 
-    <!-- Request/View: ctrlEditInvoice -->
-    <request-map uri="ctrlEditInvoice">
+    <request-map uri="viewInvoiceLines">
         <security https="true" auth="true"/>
-        <response name="success" type="view" value="vEditInvoice"/>
+        <response name="success" type="view" value="ViewInvoiceLines"/>
     </request-map>
-    <view-map name="vEditInvoice" type="screen" page="component://invoice/widget/screens/InvoiceScreens.xml#EditInvoice"/>
+    <view-map name="ViewInvoiceLines" type="screen"
+              page="component://invoice/widget/screens/InvoiceScreens.xml#ViewInvoice"/>
 
-    <!-- Request/View: ctrlEditInvoiceLine -->
-    <request-map uri="ctrlEditInvoiceLine">
+    <request-map uri="viewInvoice">
         <security https="true" auth="true"/>
-        <response name="success" type="view" value="vEditInvoiceLine"/>
+        <response name="success" type="view" value="viewViewInvoice"/>
     </request-map>
-    <view-map name="vEditInvoiceLine" type="screen" page="component://invoice/widget/screens/InvoiceScreens.xml#EditInvoiceLine"/>
 
-    <!-- Request: createInvoice -->
+    <!-- edit (alta/edición de cabecera) -->
+    <!-- Menú apunta a 'editInvoice' -->
+    <request-map uri="editInvoice">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewEditInvoice"/>
+    </request-map>
+
+    <!-- create/update/delete (cabecera) -->
     <request-map uri="createInvoice">
         <security https="true" auth="true"/>
         <event type="service" invoke="createFinInvoice"/>
-        <response name="success" type="view" value="vViewInvoice"/>
-        <response name="error" type="view" value="vEditInvoice"/>
+        <response name="success" type="view" value="viewViewInvoice"/>
+        <response name="error"   type="view" value="viewEditInvoice"/>
     </request-map>
 
-    <!-- Request: updateInvoice -->
     <request-map uri="updateInvoice">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateFinInvoice"/>
-        <response name="success" type="view" value="vViewInvoice"/>
-        <response name="error" type="view" value="vEditInvoice"/>
+        <response name="success" type="view" value="viewViewInvoice"/>
+        <response name="error"   type="view" value="viewEditInvoice"/>
     </request-map>
 
-    <!-- Request: deleteInvoice -->
     <request-map uri="deleteInvoice">
         <security https="true" auth="true"/>
         <event type="service" invoke="deleteFinInvoice"/>
-        <response name="success" type="view" value="FindInvoices"/>
-        <response name="error" type="view" value="vViewInvoice"/>
+        <response name="success" type="view" value="viewFindInvoices"/>
+        <response name="error"   type="view" value="viewViewInvoice"/>
     </request-map>
 
-    <!-- Request: createInvoiceLine -->
+    <!-- ============ -->
+    <!-- InvoiceLine -->
+    <!-- ============ -->
+
+    <!-- edit línea -->
+    <request-map uri="editInvoiceLine">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="viewEditInvoiceLine"/>
+    </request-map>
+
+    <!-- create/update/delete línea -->
     <request-map uri="createInvoiceLine">
         <security https="true" auth="true"/>
         <event type="service" invoke="createFinInvoiceLine"/>
-        <response name="success" type="view" value="vViewInvoice"/>
-        <response name="error" type="view" value="vEditInvoiceLine"/>
+        <response name="success" type="view" value="viewViewInvoice"/>
+        <response name="error"   type="view" value="viewEditInvoiceLine"/>
     </request-map>
 
-    <!-- Request: updateInvoiceLine -->
     <request-map uri="updateInvoiceLine">
         <security https="true" auth="true"/>
         <event type="service" invoke="updateFinInvoiceLine"/>
-        <response name="success" type="view" value="vViewInvoice"/>
-        <response name="error" type="view" value="vEditInvoiceLine"/>
+        <response name="success" type="view" value="viewViewInvoice"/>
+        <response name="error"   type="view" value="viewEditInvoiceLine"/>
     </request-map>
 
-    <!-- Request: deleteInvoiceLine -->
     <request-map uri="deleteInvoiceLine">
         <security https="true" auth="true"/>
         <event type="service" invoke="deleteFinInvoiceLine"/>
-        <response name="success" type="view" value="vViewInvoice"/>
-        <response name="error" type="view" value="vViewInvoice"/>
+        <response name="success" type="view" value="viewViewInvoice"/>
+        <response name="error"   type="view" value="viewViewInvoice"/>
     </request-map>
+
+    <!-- ************* -->
+    <!-- ************* -->
+    <!-- View Mappings -->
+    <!-- ************* -->
+    <!-- ************* -->
+
+    <!-- main -->
+    <view-map name="main" type="screen" page="component://invoice/widget/screens/InvoiceScreens.xml#main"/>
+
+    <!-- Invoice / find -->
+    <view-map name="viewFindInvoices" type="screen" page="component://invoice/widget/screens/InvoiceScreens.xml#main"/>
+
+    <!-- Invoice / view -->
+    <view-map name="viewViewInvoice" type="screen" page="component://invoice/widget/screens/InvoiceScreens.xml#ViewInvoice"/>
+
+    <!-- Invoice / edit -->
+    <view-map name="viewEditInvoice" type="screen" page="component://invoice/widget/screens/InvoiceScreens.xml#EditInvoice"/>
+
+    <!-- InvoiceLine / edit -->
+    <view-map name="viewEditInvoiceLine" type="screen" page="component://invoice/widget/screens/InvoiceScreens.xml#EditInvoiceLine"/>
 
 </site-conf>

@@ -3,13 +3,13 @@
              xsi:noNamespaceSchemaLocation="http://ofbiz.apache.org/dtds/entitymodel.xsd">
 
     <title>Entity of invoice Component</title>
-    <description>None</description>
-    <copyright></copyright>
-    <version></version>
+    <description>Persisted FinInvoice and FinInvoiceLine (minimal)</description>
 
     <entity entity-name="FinInvoice"
             package-name="org.apache.ofbiz.invoice.fin"
-            title="Invoice Header Entity">
+            table-name="FIN_INVOICE"
+            title="Invoice Header Entity"
+            sequence-bank-size="1">
         <field name="invoiceId" type="id"/>
         <field name="invCompany" type="id-ne"/>
         <field name="invCountry" type="id-ne"/>
@@ -41,15 +41,19 @@
         <field name="invTotalCharges" type="fixed-point"/>
         <field name="invConfirmed" type="indicator"/>
         <prim-key field="invoiceId"/>
+
         <index name="FININVOICE_NUM_SUPPLIER" unique="false">
             <index-field name="invCompany"/>
             <index-field name="invSupplierVatNumber"/>
             <index-field name="invInvoiceNumber"/>
         </index>
     </entity>
+
     <entity entity-name="FinInvoiceLine"
             package-name="org.apache.ofbiz.invoice.fin"
-            title="Invoice Line Item Entity">
+            table-name="FIN_INVOICE_LINE"
+            title="Invoice Line Item Entity"
+            sequence-bank-size="1">
         <field name="invoiceId" type="id"/>
         <field name="invoiceLineSeqId" type="id"/>
         <field name="lineCompany" type="id-ne"/>
@@ -86,8 +90,10 @@
         <field name="lineUuid" type="long-varchar"/>
         <prim-key field="invoiceId"/>
         <prim-key field="invoiceLineSeqId"/>
+
         <relation type="one" title="Invoice" rel-entity-name="FinInvoice">
-            <key-map field-name="invoiceId"/>
+            <key-map field-name="invoiceId" rel-field-name="invoiceId"/>
         </relation>
     </entity>
+
 </entitymodel>

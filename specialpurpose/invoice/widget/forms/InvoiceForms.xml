@@ -3,64 +3,43 @@
        xmlns="http://ofbiz.apache.org/Widget-Form"
        xsi:schemaLocation="http://ofbiz.apache.org/Widget-Form http://ofbiz.apache.org/dtds/widget-form.xsd">
 
-
-    <form name="FindInvoicesForm" type="single"
+    <!-- ========================= -->
+    <!-- Filtro de búsqueda (single) -->
+    <!-- ========================= -->
+    <form name="FindInvoicesForm"
+          type="single"
           header-row-style="header-row-single"
           default-table-style="basic-table"
           target="findInvoices">
-        <field name="invSupplierVatNumber">
-            <text-find/>
-        </field>
-        <field name="invSupplierName">
-            <text-find/>
-        </field>
-        <field name="invSupplierCode">
-            <text-find/>
-        </field>
-        <field name="invInvoiceNumber">
-            <text-find/>
-        </field>
 
-        <field name="invInvoiceDateFrom" title="Invoice Date From">
-            <date-find type="date"/>
-        </field>
-        <field name="invInvoiceDateTo" title="Invoice Date To">
-            <date-find type="date"/>
-        </field>
+        <!-- Necesario para performFind -->
+        <field name="entityName"><hidden value="FinInvoice"/></field>
+        <field name="noConditionFind"><hidden value="Y"/></field>
+        <!-- Importante para tu prepareFind custom: fuerza el componente -->
+        <field name="componentName"><hidden value="invoice"/></field>
 
-        <field name="invValueDateFrom" title="Value Date From">
-            <date-find type="date"/>
-        </field>
-        <field name="invValueDateTo" title="Value Date To">
-            <date-find type="date"/>
-        </field>
+        <!-- Filtros -->
+        <field name="invSupplierVatNumber" title="Supplier VAT"><text-find/></field>
+        <field name="invSupplierName" title="Supplier Name"><text-find/></field>
+        <field name="invSupplierCode" title="Supplier Code"><text-find/></field>
+        <field name="invInvoiceNumber" title="Invoice No."><text-find/></field>
 
-        <field name="invPaymentDueDateFrom" title="Payment Due Date From">
-            <date-find type="date"/>
-        </field>
-        <field name="invPaymentDueDateTo" title="Payment Due Date To">
-            <date-find type="date"/>
-        </field>
+        <field name="invInvoiceDateFrom" title="Invoice Date From"><date-find type="date"/></field>
+        <field name="invInvoiceDateTo" title="Invoice Date To"><date-find type="date"/></field>
 
-        <field name="invTaxType">
-            <text-find/>
-        </field>
-        <field name="invTaxRate">
-            <text-find/>
-        </field>
-        <field name="invCurrency">
-            <text-find/>
-        </field>
-        <field name="invPaymentMethod">
-            <text-find/>
-        </field>
+        <field name="invValueDateFrom" title="Value Date From"><date-find type="date"/></field>
+        <field name="invValueDateTo" title="Value Date To"><date-find type="date"/></field>
 
-        <field name="invNetAmountFrom" title="Net Amount From">
-            <text-find/>
-        </field>
-        <field name="invNetAmountTo" title="Net Amount To">
-            <text-find/>
-        </field>
+        <field name="invPaymentDueDateFrom" title="Payment Due Date From"><date-find type="date"/></field>
+        <field name="invPaymentDueDateTo" title="Payment Due Date To"><date-find type="date"/></field>
+
+        <field name="invTaxType" title="Tax Type"><text-find/></field>
+        <field name="invTaxRate" title="Tax Rate"><text-find/></field>
+        <field name="invCurrency" title="Currency"><text-find/></field>
+        <field name="invPaymentMethod" title="Payment Method"><text-find/></field>
+
+        <field name="invNetAmountFrom" title="Net Amount From"><text-find/></field>
+        <field name="invNetAmountTo" title="Net Amount To"><text-find/></field>
 
         <field name="invConfirmed" title="Confirmed">
             <drop-down allow-empty="true">
@@ -76,538 +55,216 @@
             </drop-down>
         </field>
 
-        <field name="submitButton" title="${uiLabelMap.CommonFind}" widget-style="smallSubmit">
-            <submit/>
-        </field>
+        <!-- Acciones -->
+        <field name="submitButton" title="${uiLabelMap.CommonFind}" widget-style="smallSubmit"><submit/></field>
         <field name="clearButton" title=" " widget-style="smallSubmit">
-            <hyperlink target="main" description="${uiLabelMap.CommonClear}"/>
+            <hyperlink target="findInvoices" description="${uiLabelMap.CommonClear}"/>
         </field>
     </form>
 
+    <!-- ======================= -->
+    <!-- Lista (usa performFind) -->
+    <!-- ======================= -->
     <form name="ListInvoicesForm" type="list" list-name="entityList"
           paginate-target="findInvoices"
           odd-row-style="alt-row" even-row-style="row-style"
           header-row-style="header-row-2" default-table-style="basic-table">
-        <!--<actions>
-             <service service-name="findFinInvoices"/>
-            <service service-name="findFinInvoicesMocked"/>
-        </actions>-->
-        <!-- mock -->
-        <!--<actions>
-            <service service-name="findFinInvoicesWrapper">
-                <field-map field-name="listIt" from-field="true"/>
-            </service>
-        </actions>-->
 
-        <field name="invSupplierCode" title="${uiLabelMap.InvoiceSupplierCode}">
-            <display/>
+        <actions>
+            <!-- Permitir listar sin filtros -->
+            <set field="parameters.noConditionFind" value="Y"/>
+            <!-- Pasar el componente a prepareFind (si tu lógica lo usa) -->
+            <set field="parameters.componentName" value="invoice"/>
+            <!-- Orden por defecto -->
+            <set field="parameters.sortField" from-field="parameters.sortField" default-value="invoiceId"/>
+
+            <!-- Llamada a performFind (con userLogin para evitar entityCondition cuando seas admin) -->
+            <service service-name="performFind" result-map="findRes">
+                <field-map field-name="entityName" value="FinInvoice"/>
+                <field-map field-name="inputFields" from-field="parameters"/>
+                <field-map field-name="orderBy" from-field="parameters.sortField"/>
+                <field-map field-name="viewIndex" from-field="viewIndex"/>
+                <field-map field-name="viewSize" from-field="viewSize"/>
+                <field-map field-name="noConditionFind" value="Y"/>
+                <field-map field-name="userLogin" from-field="userLogin"/>
+            </service>
+
+            <set field="entityList" from-field="findRes.listIt"/>
+        </actions>
+
+        <!-- Columnas ordenables -->
+        <field name="invoiceId" title="${uiLabelMap.InvoiceInvoiceId}" sort-field="true">
+            <hyperlink target="viewInvoiceDetail" description="${invoiceId}">
+                <parameter param-name="invoiceId" from-field="invoiceId"/>
+            </hyperlink>
         </field>
-        <field name="invSupplierName" title="${uiLabelMap.InvoiceSupplierName}">
-            <display/>
-        </field>
-        <field name="invSupplierVatNumber" title="${uiLabelMap.InvoiceSupplierVatNumber}">
-            <display/>
-        </field>
-        <field name="invInvoiceNumber" title="${uiLabelMap.InvoiceInvoiceNumber}">
-            <display/>
-        </field>
-        <field name="invInvoiceDate" title="${uiLabelMap.InvoiceInvoiceDate}">
-            <display type="date"/>
-        </field>
-        <field name="invValueDate" title="${uiLabelMap.InvoiceValueDate}">
-            <display type="date"/>
-        </field>
-        <field name="invPaymentDueDate" title="${uiLabelMap.InvoicePaymentDueDate}">
-            <display type="date"/>
-        </field>
-        <field name="invTaxType" title="${uiLabelMap.InvoiceTaxType}">
-            <display/>
-        </field>
-        <field name="invIva" title="${uiLabelMap.InvoiceTaxRate}">
-            <display/>
-        </field>
-        <field name="invNetAmount" title="${uiLabelMap.InvoiceNetAmount}">
-            <display type="currency"/>
-        </field>
-        <field name="invTotalVatAmount" title="${uiLabelMap.InvoiceTotalVatAmount}">
-            <display type="currency"/>
-        </field>
-        <field name="invTotalAmountWithVat" title="${uiLabelMap.InvoiceTotalAmountWithVat}">
-            <display type="currency"/>
-        </field>
-        <field name="invCurrency" title="${uiLabelMap.InvoiceCurrency}">
-            <display/>
-        </field>
-        <field name="invAccountingCurrency" title="${uiLabelMap.InvoiceAccountingCurrency}">
-            <display/>
-        </field>
-        <field name="invExchangeRate" title="${uiLabelMap.InvoiceCurrencyExchange}">
-            <display/>
-        </field>
-        <field name="invPaymentMethod" title="${uiLabelMap.InvoicePaymentMethod}">
-            <display/>
-        </field>
-        <field name="invPaymentDone" title="${uiLabelMap.InvoicePaymentDone}">
-            <display/>
-        </field>
-        <field name="invConfirmed" title="${uiLabelMap.InvoiceConfirmed}">
-            <display/>
-        </field>
+
+        <field name="invSupplierCode" title="${uiLabelMap.InvoiceSupplierCode}" sort-field="true"><display/></field>
+        <field name="invSupplierName" title="${uiLabelMap.InvoiceSupplierName}" sort-field="true"><display/></field>
+        <field name="invSupplierVatNumber" title="${uiLabelMap.InvoiceSupplierVatNumber}" sort-field="true"><display/></field>
+        <field name="invInvoiceNumber" title="${uiLabelMap.InvoiceInvoiceNumber}" sort-field="true"><display/></field>
+        <field name="invInvoiceDate" title="${uiLabelMap.InvoiceInvoiceDate}" sort-field="true"><display type="date"/></field>
+        <field name="invValueDate" title="${uiLabelMap.InvoiceValueDate}" sort-field="true"><display type="date"/></field>
+        <field name="invPaymentDueDate" title="${uiLabelMap.InvoicePaymentDueDate}" sort-field="true"><display type="date"/></field>
+        <field name="invTaxType" title="${uiLabelMap.InvoiceTaxType}" sort-field="true"><display/></field>
+        <field name="invIva" title="${uiLabelMap.InvoiceTaxRate}" sort-field="true"><display/></field>
+        <field name="invNetAmount" title="${uiLabelMap.InvoiceNetAmount}" sort-field="true"><display type="currency"/></field>
+        <field name="invTotalVatAmount" title="${uiLabelMap.InvoiceTotalVatAmount}" sort-field="true"><display type="currency"/></field>
+        <field name="invTotalAmountWithVat" title="${uiLabelMap.InvoiceTotalAmountWithVat}" sort-field="true"><display type="currency"/></field>
+        <field name="invCurrency" title="${uiLabelMap.InvoiceCurrency}" sort-field="true"><display/></field>
+        <field name="invAccountingCurrency" title="${uiLabelMap.InvoiceAccountingCurrency}" sort-field="true"><display/></field>
+        <field name="invExchangeRate" title="${uiLabelMap.InvoiceCurrencyExchange}" sort-field="true"><display/></field>
+        <field name="invPaymentMethod" title="${uiLabelMap.InvoicePaymentMethod}" sort-field="true"><display/></field>
+        <field name="invPaymentDone" title="${uiLabelMap.InvoicePaymentDone}" sort-field="true"><display/></field>
+        <field name="invConfirmed" title="${uiLabelMap.InvoiceConfirmed}" sort-field="true"><display/></field>
 
         <field name="view" title=" ">
             <hyperlink target="viewInvoiceDetail" description="${uiLabelMap.CommonView}">
-                <parameter param-name="invoiceId" from-field="invInvoiceNumber"/>
+                <parameter param-name="invoiceId" from-field="invoiceId"/>
             </hyperlink>
         </field>
     </form>
 
+    <!-- ============================================= -->
+    <!-- Lista completa -->
+    <!-- ============================================= -->
     <form name="ListInvoicesFormFull" type="list" list-name="entityList"
           paginate-target="findInvoices"
           odd-row-style="alt-row" even-row-style="row-style"
           header-row-style="header-row-2" default-table-style="basic-table">
-        <!--<actions>
-             <service service-name="findFinInvoices"/>
-            <service service-name="findFinInvoicesMocked"/>
-        </actions>-->
-        <!-- mock -->
+
         <actions>
-            <service service-name="findFinInvoicesMocked">
-                <field-map field-name="listIt" from-field="true"/>
+            <set field="noConditionFind" value="Y"/>
+            <set field="parameters.noConditionFind" value="Y"/>
+            <set field="parameters.componentName" value="invoice"/>
+            <set field="parameters.sortField" from-field="parameters.sortField" default-value="invoiceId"/>
+            <set field="entityName" value="FinInvoice"/>
+            <set field="parameters.entityName" value="FinInvoice"/>
+
+            <service service-name="performFind" result-map="result" result-map-list="entityList">
+                <field-map field-name="inputFields" from-field="parameters"/>
+                <field-map field-name="entityName" value="FinInvoice"/>
+                <field-map field-name="orderBy" from-field="parameters.sortField"/>
+                <field-map field-name="viewIndex" from-field="viewIndex"/>
+                <field-map field-name="viewSize" from-field="viewSize"/>
+                <field-map field-name="noConditionFind" value="Y"/>
+                <field-map field-name="userLogin" from-field="userLogin"/>
             </service>
+
+            <set field="entityList" from-field="result.listIt"/>
         </actions>
 
-        <field name="invSupplierCode" title="${uiLabelMap.InvoiceSupplierCode}">
-            <display/>
-        </field>
-        <field name="invSupplierName" title="${uiLabelMap.InvoiceSupplierName}">
-            <display/>
-        </field>
-        <field name="invSupplierVatNumber" title="${uiLabelMap.InvoiceSupplierVatNumber}">
-            <display/>
-        </field>
-        <field name="invInvoiceNumber" title="${uiLabelMap.InvoiceInvoiceNumber}">
-            <display/>
-        </field>
-        <field name="invInvoiceDate" title="${uiLabelMap.InvoiceInvoiceDate}">
-            <display type="date"/>
-        </field>
-        <field name="invValueDate" title="${uiLabelMap.InvoiceValueDate}">
-            <display type="date"/>
-        </field>
-        <field name="invPaymentDueDate" title="${uiLabelMap.InvoicePaymentDueDate}">
-            <display type="date"/>
-        </field>
-        <field name="invTaxType" title="${uiLabelMap.InvoiceTaxType}">
-            <display/>
-        </field>
-        <field name="invIva" title="${uiLabelMap.InvoiceTaxRate}">
-            <display/>
-        </field>
-        <field name="invNetAmount" title="${uiLabelMap.InvoiceNetAmount}">
-            <display type="currency"/>
-        </field>
-        <field name="invTotalVatAmount" title="${uiLabelMap.InvoiceTotalVatAmount}">
-            <display type="currency"/>
-        </field>
-        <field name="invTotalAmountWithVat" title="${uiLabelMap.InvoiceTotalAmountWithVat}">
-            <display type="currency"/>
-        </field>
-        <field name="invCurrency" title="${uiLabelMap.InvoiceCurrency}">
-            <display/>
-        </field>
-        <field name="invAccountingCurrency" title="${uiLabelMap.InvoiceAccountingCurrency}">
-            <display/>
-        </field>
-        <field name="invExchangeRate" title="${uiLabelMap.InvoiceCurrencyExchange}">
-            <display/>
-        </field>
-        <field name="invPaymentMethod" title="${uiLabelMap.InvoicePaymentMethod}">
-            <display/>
-        </field>
-        <field name="invPaymentDone" title="${uiLabelMap.InvoicePaymentDone}">
-            <display/>
-        </field>
-        <field name="invConfirmed" title="${uiLabelMap.InvoiceConfirmed}">
-            <display/>
-        </field>
+        <!-- mismas columnas que la lista anterior -->
+        <field name="invoiceId" title="${uiLabelMap.InvoiceInvoiceId}" sort-field="true"><display/></field>
+        <field name="invSupplierCode" title="${uiLabelMap.InvoiceSupplierCode}" sort-field="true"><display/></field>
+        <field name="invSupplierName" title="${uiLabelMap.InvoiceSupplierName}" sort-field="true"><display/></field>
+        <field name="invSupplierVatNumber" title="${uiLabelMap.InvoiceSupplierVatNumber}" sort-field="true"><display/></field>
+        <field name="invInvoiceNumber" title="${uiLabelMap.InvoiceInvoiceNumber}" sort-field="true"><display/></field>
+        <field name="invInvoiceDate" title="${uiLabelMap.InvoiceInvoiceDate}" sort-field="true"><display type="date"/></field>
+        <field name="invValueDate" title="${uiLabelMap.InvoiceValueDate}" sort-field="true"><display type="date"/></field>
+        <field name="invPaymentDueDate" title="${uiLabelMap.InvoicePaymentDueDate}" sort-field="true"><display type="date"/></field>
+        <field name="invTaxType" title="${uiLabelMap.InvoiceTaxType}" sort-field="true"><display/></field>
+        <field name="invIva" title="${uiLabelMap.InvoiceTaxRate}" sort-field="true"><display/></field>
+        <field name="invNetAmount" title="${uiLabelMap.InvoiceNetAmount}" sort-field="true"><display type="currency"/></field>
+        <field name="invTotalVatAmount" title="${uiLabelMap.InvoiceTotalVatAmount}" sort-field="true"><display type="currency"/></field>
+        <field name="invTotalAmountWithVat" title="${uiLabelMap.InvoiceTotalAmountWithVat}" sort-field="true"><display type="currency"/></field>
+        <field name="invCurrency" title="${uiLabelMap.InvoiceCurrency}" sort-field="true"><display/></field>
+        <field name="invAccountingCurrency" title="${uiLabelMap.InvoiceAccountingCurrency}" sort-field="true"><display/></field>
+        <field name="invExchangeRate" title="${uiLabelMap.InvoiceCurrencyExchange}" sort-field="true"><display/></field>
+        <field name="invPaymentMethod" title="${uiLabelMap.InvoicePaymentMethod}" sort-field="true"><display/></field>
+        <field name="invPaymentDone" title="${uiLabelMap.InvoicePaymentDone}" sort-field="true"><display/></field>
+        <field name="invConfirmed" title="${uiLabelMap.InvoiceConfirmed}" sort-field="true"><display/></field>
 
-        <field name="view" title="${uiLabelMap.CommonView}" widget-style="buttontext">
+        <field name="view" title="${uiLabelMap.CommonView}">
             <hyperlink target="viewInvoiceDetail" description="${uiLabelMap.CommonView}">
-                <parameter param-name="invoiceId" from-field="invInvoiceNumber"/>
+                <parameter param-name="invoiceId" from-field="invoiceId"/>
             </hyperlink>
         </field>
     </form>
 
-    <form name="ViewInvoiceForm" type="single"
+    <!-- VIEW INVOICE FORM -->
+    <form name="ViewInvoiceForm"
+          type="single"
+          default-map-name="invoice"
           header-row-style="header-row-single"
           default-table-style="basic-table">
-        <field name="header" title="Detalles de Factura: ${parameters.invInvoiceNumber}" widget-style="h1">
-            <display type="text"/>
-        </field>
-        <field name="invoiceId" title="${uiLabelMap.InvoiceInvoiceId}">
-            <display/>
-        </field>
-        <field name="invCompany" title="${uiLabelMap.InvoiceCompany}">
-            <display/>
-        </field>
-        <field name="invCountry" title="${uiLabelMap.InvoiceCountry}">
-            <display/>
-        </field>
-        <field name="invSupplierVatNumber" title="${uiLabelMap.InvoiceSupplierVatNumber}">
-            <display/>
-        </field>
-        <field name="invSupplierName" title="${uiLabelMap.InvoiceSupplierName}">
-            <display/>
-        </field>
-        <field name="invSupplierCode" title="${uiLabelMap.InvoiceSupplierCode}">
-            <display/>
-        </field>
-        <field name="invTaxType" title="${uiLabelMap.InvoiceTaxType}">
-            <display/>
-        </field>
-        <field name="invIva" title="${uiLabelMap.InvoiceIva}">
-            <display/>
-        </field>
-        <field name="invIrpf" title="${uiLabelMap.InvoiceIrpf}">
-            <display/>
-        </field>
-        <field name="invCurrency" title="${uiLabelMap.InvoiceCurrency}">
-            <display/>
-        </field>
-        <field name="invPaymentMethod" title="${uiLabelMap.InvoicePaymentMethod}">
-            <display/>
-        </field>
-        <field name="invInvoiceNumber" title="${uiLabelMap.InvoiceInvoiceNumber}">
-            <display/>
-        </field>
-        <field name="invInvoiceDate" title="${uiLabelMap.InvoiceInvoiceDate}">
-            <display type="date"/>
-        </field>
-        <field name="invValueDate" title="${uiLabelMap.InvoiceValueDate}">
-            <display type="date"/>
-        </field>
-        <field name="invPaymentDueDate" title="${uiLabelMap.InvoicePaymentDueDate}">
-            <display type="date"/>
-        </field>
-        <field name="invProof" title="${uiLabelMap.InvoiceProof}">
-            <display/>
-        </field>
-        <field name="invAccountingCurrency" title="${uiLabelMap.InvoiceAccountingCurrency}">
-            <display/>
-        </field>
-        <field name="invExchangeRate" title="${uiLabelMap.InvoiceExchangeRate}">
-            <display/>
-        </field>
-        <field name="invNetAmount" title="${uiLabelMap.InvoiceNetAmount}">
-            <display type="currency"/>
-        </field>
-        <field name="invAmountWithoutVat" title="${uiLabelMap.InvoiceAmountWithoutVat}">
-            <display type="currency"/>
-        </field>
-        <field name="invTotalVatAmount" title="${uiLabelMap.InvoiceTotalVatAmount}">
-            <display type="currency"/>
-        </field>
-        <field name="invTotalVatAmountInAccountingCurrency"
-               title="${uiLabelMap.InvoiceTotalVatAmountInAccountingCurrency}">
-            <display type="currency"/>
-        </field>
-        <field name="invTotalAmountWithVat" title="${uiLabelMap.InvoiceTotalAmountWithVat}">
-            <display type="currency"/>
-        </field>
-        <field name="invStatus" title="${uiLabelMap.InvoiceStatus}">
-            <display/>
-        </field>
-        <field name="invPaymentDone" title="${uiLabelMap.InvoicePaymentDone}">
-            <display/>
-        </field>
-        <field name="invUuid" title="${uiLabelMap.InvoiceUuid}">
-            <display/>
-        </field>
-        <field name="invDocumentTypeCode" title="${uiLabelMap.InvoiceDocumentTypeCode}">
-            <display/>
-        </field>
-        <field name="invTotalDiscounts" title="${uiLabelMap.InvoiceTotalDiscounts}">
-            <display type="currency"/>
-        </field>
-        <field name="invTotalCharges" title="${uiLabelMap.InvoiceTotalCharges}">
-            <display type="currency"/>
-        </field>
-        <field name="backButton" title=" " widget-style="smallSubmit">
-            <hyperlink target="main" description="&lt; ${uiLabelMap.CommonBack}"/>
-        </field>
-        <field name="printLink" title=" " widget-style="smallSubmit">
-            <hyperlink description="${uiLabelMap.CommonPrint}" url-mode="plain">
-                <parameter param-name="invoiceId"/>
-                <attribute name="onclick" value="window.print();"/>
-            </hyperlink>
-        </field>
+
+        <!-- Identificación -->
+        <field name="invoiceId" title="${uiLabelMap.InvoiceInvoiceId}"><display/></field>
+        <field name="invInvoiceNumber" title="${uiLabelMap.InvoiceInvoiceNumber}"><display/></field>
+
+        <!-- Proveedor -->
+        <field name="invSupplierCode" title="${uiLabelMap.InvoiceSupplierCode}"><display/></field>
+        <field name="invSupplierName" title="${uiLabelMap.InvoiceSupplierName}"><display/></field>
+        <field name="invSupplierVatNumber" title="${uiLabelMap.InvoiceSupplierVatNumber}"><display/></field>
+
+        <!-- Fechas -->
+        <field name="invInvoiceDate" title="${uiLabelMap.InvoiceInvoiceDate}"><display type="date"/></field>
+        <field name="invValueDate" title="${uiLabelMap.InvoiceValueDate}"><display type="date"/></field>
+        <field name="invPaymentDueDate" title="${uiLabelMap.InvoicePaymentDueDate}"><display type="date"/></field>
+
+        <!-- Impuestos y totales -->
+        <field name="invTaxType" title="${uiLabelMap.InvoiceTaxType}"><display/></field>
+        <field name="invIva" title="${uiLabelMap.InvoiceTaxRate}"><display/></field>
+        <field name="invNetAmount" title="${uiLabelMap.InvoiceNetAmount}"><display type="currency"/></field>
+        <field name="invTotalVatAmount" title="${uiLabelMap.InvoiceTotalVatAmount}"><display type="currency"/></field>
+        <field name="invTotalAmountWithVat" title="${uiLabelMap.InvoiceTotalAmountWithVat}"><display type="currency"/></field>
+
+        <!-- Moneda -->
+        <field name="invCurrency" title="${uiLabelMap.InvoiceCurrency}"><display/></field>
+        <field name="invAccountingCurrency" title="${uiLabelMap.InvoiceAccountingCurrency}"><display/></field>
+        <field name="invExchangeRate" title="${uiLabelMap.InvoiceCurrencyExchange}"><display/></field>
+
+        <!-- Pago / estados -->
+        <field name="invPaymentMethod" title="${uiLabelMap.InvoicePaymentMethod}"><display/></field>
+        <field name="invPaymentDone" title="${uiLabelMap.InvoicePaymentDone}"><display/></field>
+        <field name="invConfirmed" title="${uiLabelMap.InvoiceConfirmed}"><display/></field>
+
     </form>
 
-    <form name="ListInvoiceLines" type="list" list-name="entityList"
-          paginate-target="viewInvoice"
+    <!-- view lines -->
+    <form name="ListInvoiceLines"
+          type="list"
+          list-name="invoiceLines"
+          list-entry-name="line"
+          default-map-name="line"
+          paginate-target="viewInvoiceDetail"
           odd-row-style="alt-row" even-row-style="row-style"
           header-row-style="header-row-2" default-table-style="basic-table">
-        <actions>
-            <service service-name="findFinInvoiceLines">
-                <field-map field-name="invoiceId" from-field="parameters.invoiceId"/>
-            </service>
-        </actions>
-        <field name="invoiceLineSeqId" title="${uiLabelMap.InvoiceLineLineId}">
-            <display/>
-        </field>
-        <field name="lineArticleCodeBySeller" title="${uiLabelMap.InvoiceLineArticleCodeBySeller}">
-            <display/>
-        </field>
-        <field name="lineName" title="${uiLabelMap.InvoiceLineName}">
-            <display/>
-        </field>
-        <field name="lineQuantity" title="${uiLabelMap.InvoiceLineQuantity}">
-            <display/>
-        </field>
-        <field name="lineMeasurementUnit" title="${uiLabelMap.InvoiceLineMeasurementUnit}">
-            <display/>
-        </field>
-        <field name="lineUnitPrice" title="${uiLabelMap.InvoiceLineUnitPrice}">
-            <display/>
-        </field>
-        <field name="lineNetAmount" title="${uiLabelMap.InvoiceLineNetAmount}">
-            <display type="currency"/>
-        </field>
-        <field name="lineTaxRate" title="${uiLabelMap.InvoiceLineTaxRate}">
-            <display/>
-        </field>
-        <field name="lineTotalVatAmount" title="${uiLabelMap.InvoiceLineTotalVatAmount}">
-            <display type="currency"/>
-        </field>
-        <field name="lineTotalAmountWithVat" title="${uiLabelMap.InvoiceLineTotalAmountWithVat}">
-            <display type="currency"/>
-        </field>
-        <field name="edit" title="${uiLabelMap.CommonEdit}" widget-style="buttontext">
-            <hyperlink target="editInvoiceLine" description="${uiLabelMap.CommonEdit}">
-                <parameter param-name="invoiceId"/>
-                <parameter param-name="invoiceLineSeqId"/>
-            </hyperlink>
-        </field>
+
+        <field name="invoiceLineSeqId" title="Line ID"><display/></field>
+        <field name="lineName" title="Name"><display/></field>
+        <field name="lineArticleCodeBySeller" title="Article code"><display/></field>
+        <field name="lineQuantity" title="Quantity"><display/></field>
+        <field name="lineMeasurementUnit" title="Measurement Unit"><display/></field>
+        <field name="lineUnitPrice" title="Unit Price"><display type="currency"/></field>
+        <field name="lineDeliveryNote" title="Delivery Note"><display/></field>
+        <field name="lineTaxRate" title="Tax Rate"><display/></field>
+        <field name="lineNetAmount" title="Net Amount"><display type="currency"/></field>
+        <field name="lineTotalAmountWithVat" title="Total with VAT"><display type="currency"/></field>
+        <field name="lineProof" title="Proof"><display/></field>
+        <field name="lineCc" title="Cost Center"><display/></field>
+        <field name="lineBranch" title="Branch"><display/></field>
+        <field name="lineProject" title="Project"><display/></field>
     </form>
 
-    <form name="EditInvoiceForm" type="single"
-          header-row-style="header-row-single"
+    <!-- totales -->
+    <form name="InvoiceLinesTotals"
+          type="list"
+          list-name="totalsList"
+          list-entry-name="t"
+          default-map-name="t"
+          header-row-style="header-row-2"
           default-table-style="basic-table">
-        <field name="invoiceId" title="${uiLabelMap.InvoiceInvoiceId}" tooltip="${uiLabelMap.CommonCannotBeChanged}">
-            <hidden/>
-        </field>
-        <field name="invCompany" title="${uiLabelMap.InvoiceCompany}">
-            <text size="20"/>
-        </field>
-        <field name="invCountry" title="${uiLabelMap.InvoiceCountry}">
-            <text size="10"/>
-        </field>
-        <field name="invSupplierVatNumber" title="${uiLabelMap.InvoiceSupplierVatNumber}">
-            <text size="30"/>
-        </field>
-        <field name="invSupplierName" title="${uiLabelMap.InvoiceSupplierName}">
-            <text size="50"/>
-        </field>
-        <field name="invSupplierCode" title="${uiLabelMap.InvoiceSupplierCode}">
-            <text size="20"/>
-        </field>
-        <field name="invTaxType" title="${uiLabelMap.InvoiceTaxType}">
-            <text size="20"/>
-        </field>
-        <field name="invIva" title="${uiLabelMap.InvoiceIva}">
-            <text size="10"/>
-        </field>
-        <field name="invIrpf" title="${uiLabelMap.InvoiceIrpf}">
-            <text size="10"/>
-        </field>
-        <field name="invCurrency" title="${uiLabelMap.InvoiceCurrency}">
-            <text size="10"/>
-        </field>
-        <field name="invPaymentMethod" title="${uiLabelMap.InvoicePaymentMethod}">
-            <text size="10"/>
-        </field>
-        <field name="invInvoiceNumber" title="${uiLabelMap.InvoiceInvoiceNumber}">
-            <text size="30"/>
-        </field>
-        <field name="invInvoiceDate" title="${uiLabelMap.InvoiceInvoiceDate}">
-            <date-time type="date"/>
-        </field>
-        <field name="invValueDate" title="${uiLabelMap.InvoiceValueDate}">
-            <date-time type="date"/>
-        </field>
-        <field name="invPaymentDueDate" title="${uiLabelMap.InvoicePaymentDueDate}">
-            <date-time type="date"/>
-        </field>
-        <field name="invProof" title="${uiLabelMap.InvoiceProof}">
-            <text size="20"/>
-        </field>
-        <field name="invAccountingCurrency" title="${uiLabelMap.InvoiceAccountingCurrency}">
-            <text size="10"/>
-        </field>
-        <field name="invExchangeRate" title="${uiLabelMap.InvoiceExchangeRate}">
-            <text size="15"/>
-        </field>
-        <field name="invNetAmount" title="${uiLabelMap.InvoiceNetAmount}">
-            <text size="20"/>
-        </field>
-        <field name="invAmountWithoutVat" title="${uiLabelMap.InvoiceAmountWithoutVat}">
-            <text size="20"/>
-        </field>
-        <field name="invTotalVatAmount" title="${uiLabelMap.InvoiceTotalVatAmount}">
-            <text size="20"/>
-        </field>
-        <field name="invTotalVatAmountInAccountingCurrency"
-               title="${uiLabelMap.InvoiceTotalVatAmountInAccountingCurrency}">
-            <text size="20"/>
-        </field>
-        <field name="invTotalAmountWithVat" title="${uiLabelMap.InvoiceTotalAmountWithVat}">
-            <text size="20"/>
-        </field>
-        <field name="invStatus" title="${uiLabelMap.InvoiceStatus}">
-            <text size="20"/>
-        </field>
-        <field name="invPaymentDone" title="${uiLabelMap.InvoicePaymentDone}">
-            <drop-down>
-                <option key="Y" description="${uiLabelMap.CommonYes}"/>
-                <option key="N" description="${uiLabelMap.CommonNo}"/>
-            </drop-down>
-        </field>
-        <field name="invUuid" title="${uiLabelMap.InvoiceUuid}">
-            <text size="50"/>
-        </field>
-        <field name="invDocumentTypeCode" title="${uiLabelMap.InvoiceDocumentTypeCode}">
-            <text size="10"/>
-        </field>
-        <field name="invTotalDiscounts" title="${uiLabelMap.InvoiceTotalDiscounts}">
-            <text size="20"/>
-        </field>
-        <field name="invTotalCharges" title="${uiLabelMap.InvoiceTotalCharges}">
-            <text size="20"/>
-        </field>
 
-        <field name="submitButton" title="${uiLabelMap.CommonSave}" widget-style="smallSubmit">
-            <submit button-type="button"/>
-        </field>
-        <field name="cancelLink" title="${uiLabelMap.CommonCancel}" widget-style="smallSubmit">
-            <hyperlink target="findInvoices" description="${uiLabelMap.CommonCancel}"/>
-        </field>
-    </form>
+        <!-- Etiqueta -->
+        <field name="totalsLabel" title=""><display/></field>
 
-    <form name="EditInvoiceLineForm" type="single"
-          header-row-style="header-row-single"
-          default-table-style="basic-table">
-        <field name="invoiceId" title="${uiLabelMap.InvoiceInvoiceId}" tooltip="${uiLabelMap.CommonCannotBeChanged}">
-            <hidden/>
-        </field>
-        <field name="invoiceLineSeqId" title="${uiLabelMap.InvoiceLineLineId}"
-               tooltip="${uiLabelMap.CommonCannotBeChanged}">
-            <hidden/>
-        </field>
-        <field name="lineCompany" title="${uiLabelMap.InvoiceLineCompany}">
-            <text size="20"/>
-        </field>
-        <field name="lineSupplierVatNumber" title="${uiLabelMap.InvoiceLineSupplierVatNumber}">
-            <text size="30"/>
-        </field>
-        <field name="lineInvoiceNumber" title="${uiLabelMap.InvoiceLineInvoiceNumber}">
-            <text size="30"/>
-        </field>
-        <field name="lineLineId" title="${uiLabelMap.InvoiceLineLineId}">
-            <text size="10"/>
-        </field>
-        <field name="lineName" title="${uiLabelMap.InvoiceLineName}">
-            <text size="50"/>
-        </field>
-        <field name="lineDeliveryDate" title="${uiLabelMap.InvoiceLineDeliveryDate}">
-            <date-time type="date"/>
-        </field>
-        <field name="lineArticleCodeBySeller" title="${uiLabelMap.InvoiceLineArticleCodeBySeller}">
-            <text size="30"/>
-        </field>
-        <field name="lineQuantity" title="${uiLabelMap.InvoiceLineQuantity}">
-            <text size="20"/>
-        </field>
-        <field name="lineMeasurementUnit" title="${uiLabelMap.InvoiceLineMeasurementUnit}">
-            <text size="10"/>
-        </field>
-        <field name="lineUnitPrice" title="${uiLabelMap.InvoiceLineUnitPrice}">
-            <text size="20"/>
-        </field>
-        <field name="lineDeliveryNote" title="${uiLabelMap.InvoiceLineDeliveryNote}">
-            <text size="30"/>
-        </field>
-        <field name="lineTaxType" title="${uiLabelMap.InvoiceLineTaxType}">
-            <text size="20"/>
-        </field>
-        <field name="lineTaxRate" title="${uiLabelMap.InvoiceLineTaxRate}">
-            <text size="10"/>
-        </field>
-        <field name="lineNetAmount" title="${uiLabelMap.InvoiceLineNetAmount}">
-            <text size="20"/>
-        </field>
-        <field name="lineProof" title="${uiLabelMap.InvoiceLineProof}">
-            <text size="20"/>
-        </field>
-        <field name="lineCc" title="${uiLabelMap.InvoiceLineCc}">
-            <text size="20"/>
-        </field>
-        <field name="lineLocation" title="${uiLabelMap.InvoiceLineLocation}">
-            <text size="20"/>
-        </field>
-        <field name="lineSection" title="${uiLabelMap.InvoiceLineSection}">
-            <text size="20"/>
-        </field>
-        <field name="lineArticleDescription" title="${uiLabelMap.InvoiceLineArticleDescription}">
-            <text size="60"/>
-        </field>
-        <field name="lineInternalCode" title="${uiLabelMap.InvoiceLineInternalCode}">
-            <text size="30"/>
-        </field>
-        <field name="lineGlAccount" title="${uiLabelMap.InvoiceLineGlAccount}">
-            <text size="30"/>
-        </field>
-        <field name="lineProductCode" title="${uiLabelMap.InvoiceLineProductCode}">
-            <text size="30"/>
-        </field>
-        <field name="lineTotalVatAmount" title="${uiLabelMap.InvoiceLineTotalVatAmount}">
-            <text size="20"/>
-        </field>
-        <field name="lineTotalAmountWithVat" title="${uiLabelMap.InvoiceLineTotalAmountWithVat}">
-            <text size="20"/>
-        </field>
-        <field name="lineTotalDiscounts" title="${uiLabelMap.InvoiceLineTotalDiscounts}">
-            <text size="20"/>
-        </field>
-        <field name="lineTotalCharges" title="${uiLabelMap.InvoiceLineTotalCharges}">
-            <text size="20"/>
-        </field>
-        <field name="lineAccountingCurrency" title="${uiLabelMap.InvoiceLineAccountingCurrency}">
-            <text size="10"/>
-        </field>
-        <field name="lineCurrencyExchange" title="${uiLabelMap.InvoiceLineCurrencyExchange}">
-            <text size="15"/>
-        </field>
-        <field name="lineProductType" title="${uiLabelMap.InvoiceLineProductType}">
-            <text size="10"/>
-        </field>
-        <field name="lineProject" title="${uiLabelMap.InvoiceLineProject}">
-            <text size="30"/>
-        </field>
-        <field name="lineBranch" title="${uiLabelMap.InvoiceLineBranch}">
-            <text size="20"/>
-        </field>
-        <field name="lineUuid" title="${uiLabelMap.InvoiceLineUuid}">
-            <text size="50"/>
-        </field>
+        <!-- Total neto -->
+        <field name="totalNet" title=""><display type="currency"/></field>
 
-        <field name="submitButton" title="${uiLabelMap.CommonSave}" widget-style="smallSubmit">
-            <submit button-type="button"/>
-        </field>
-        <field name="cancelLink" title="${uiLabelMap.CommonCancel}" widget-style="smallSubmit">
-            <hyperlink target="viewInvoice" description="${uiLabelMap.CommonCancel}">
-                <parameter param-name="invoiceId"/>
-            </hyperlink>
-        </field>
+        <!-- Total con IVA -->
+        <field name="totalWithVat" title=""><display type="currency"/></field>
     </form>
 
 </forms>
