@@ -46,6 +46,16 @@
         <response name="success" type="view" value="viewFindInvoices"/>
     </request-map>
 
+    <!-- Ver solo cabecera -->
+    <request-map uri="viewInvoiceHeader">
+        <security auth="true" https="true"/>
+        <response name="success" type="view" value="ViewInvoiceHeader"/>
+    </request-map>
+
+    <view-map name="ViewInvoiceHeader"
+              type="screen"
+              page="component://invoice/widget/screens/InvoiceScreens.xml#ViewInvoiceHeader"/>
+
     <!-- view (detalle) -->
     <!-- Soporta ambos targets usados en la UI: 'viewInvoiceDetail' y 'viewInvoice' -->
     <request-map uri="viewInvoiceDetail">

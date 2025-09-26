@@ -27,6 +27,17 @@
         <section>
             <widgets>
                 <decorator-screen name="main-decorator" location="component://invoice/widget/CommonScreens.xml">
+
+                    <!-- INYECCIÓN EN <head> -->
+                    <decorator-section name="head">
+                        <platform-specific>
+                            <html>
+                                <html-template location="component://invoice/webapp/invoice/includes/invoice-head.ftl"/>
+                            </html>
+                        </platform-specific>
+                    </decorator-section>
+
+                    <!-- Cuerpo -->
                     <decorator-section name="body">
                         <section>
                             <widgets>
@@ -41,4 +52,5 @@
             </widgets>
         </section>
     </screen>
+
 </screens>

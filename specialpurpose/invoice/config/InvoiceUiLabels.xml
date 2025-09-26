@@ -36,6 +36,18 @@
         <value xml:lang="en">Accounting Currency</value>
         <value xml:lang="es">Moneda Contable</value>
     </property>
+    <property key="InvoiceCurrencyExchange">
+        <value xml:lang="en">Invoice Currency Exchange</value>
+        <value xml:lang="es">Cambio de Divisa en Facturas</value>
+    </property>
+    <property key="InvoiceTaxRate">
+        <value xml:lang="en">Invoice Tax Rate</value>
+        <value xml:lang="es">Tasa Impositiva de la Factura</value>
+    </property>
+    <property key="InvoiceConfirmed">
+        <value xml:lang="en">Invoice Confirmed</value>
+        <value xml:lang="es">Factura Confirmada</value>
+    </property>
     <property key="InvoiceAmountWithoutVat">
         <value xml:lang="en">Amount Without VAT</value>
         <value xml:lang="es">Importe sin IVA</value>

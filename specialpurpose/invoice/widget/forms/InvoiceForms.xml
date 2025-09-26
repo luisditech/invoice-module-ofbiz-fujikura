@@ -6,69 +6,88 @@
     <!-- ========================= -->
     <!-- Filtro de búsqueda (single) -->
     <!-- ========================= -->
+    <!-- ========================= -->
+    <!-- Buscador en grilla (3 por fila, sin CSS) -->
+    <!-- ========================= -->
     <form name="FindInvoicesForm"
           type="single"
-          header-row-style="header-row-single"
-          default-table-style="basic-table"
-          target="findInvoices">
+          target="findInvoices"
+          default-table-style="condensed-table"
+          header-row-style="header-row-single">
 
-        <!-- Necesario para performFind -->
+        <!-- Necesario para performFind / prepareFind -->
         <field name="entityName"><hidden value="FinInvoice"/></field>
         <field name="noConditionFind"><hidden value="Y"/></field>
-        <!-- Importante para tu prepareFind custom: fuerza el componente -->
         <field name="componentName"><hidden value="invoice"/></field>
 
-        <!-- Filtros -->
-        <field name="invSupplierVatNumber" title="Supplier VAT"><text-find/></field>
-        <field name="invSupplierName" title="Supplier Name"><text-find/></field>
-        <field name="invSupplierCode" title="Supplier Code"><text-find/></field>
-        <field name="invInvoiceNumber" title="Invoice No."><text-find/></field>
+        <!-- Fila 1 -->
+        <field name="invSupplierVatNumber" title="Supplier VAT Number" position="1"><text-find/></field>
+        <field name="invSupplierName"      title="Supplier Name"        position="2"><text-find/></field>
 
-        <field name="invInvoiceDateFrom" title="Invoice Date From"><date-find type="date"/></field>
-        <field name="invInvoiceDateTo" title="Invoice Date To"><date-find type="date"/></field>
+        <!-- Fila 2 -->
+        <field name="invSupplierCode"      title="Supplier Code"        position="1"><text-find/></field>
+        <field name="invInvoiceNumber"     title="Invoice Number"       position="2"><text-find/></field>
 
-        <field name="invValueDateFrom" title="Value Date From"><date-find type="date"/></field>
-        <field name="invValueDateTo" title="Value Date To"><date-find type="date"/></field>
+        <!-- Fila 3 -->
+        <field name="invInvoiceDateFrom"   title="Invoice Date From"    position="1"><date-find type="date"/></field>
+        <field name="invInvoiceDateTo"     title="Invoice Date To"      position="2"><date-find type="date"/></field>
 
-        <field name="invPaymentDueDateFrom" title="Payment Due Date From"><date-find type="date"/></field>
-        <field name="invPaymentDueDateTo" title="Payment Due Date To"><date-find type="date"/></field>
+        <!-- Fila 4 -->
+        <field name="invValueDateFrom"     title="Value Date From"      position="1"><date-find type="date"/></field>
+        <field name="invValueDateTo"       title="Value Date To"        position="2"><date-find type="date"/></field>
 
-        <field name="invTaxType" title="Tax Type"><text-find/></field>
-        <field name="invTaxRate" title="Tax Rate"><text-find/></field>
-        <field name="invCurrency" title="Currency"><text-find/></field>
-        <field name="invPaymentMethod" title="Payment Method"><text-find/></field>
+        <!-- Fila 5 -->
+        <field name="invPaymentDueDateFrom" title="Payment Due Date From" position="1"><date-find type="date"/></field>
+        <field name="invPaymentDueDateTo"  title="Payment Due Date To"  position="2"><date-find type="date"/></field>
 
-        <field name="invNetAmountFrom" title="Net Amount From"><text-find/></field>
-        <field name="invNetAmountTo" title="Net Amount To"><text-find/></field>
+        <!-- Fila 6 -->
+        <field name="invTaxType"           title="Tax Type"             position="1"><text-find/></field>
+        <field name="invTaxRate"           title="Tax Rate"             position="2"><text-find/></field>
 
-        <field name="invConfirmed" title="Confirmed">
+        <!-- Fila 7 -->
+        <field name="invCurrency"          title="Currency"             position="1"><text-find/></field>
+        <field name="invPaymentMethod"     title="Payment Method"       position="2"><text-find/></field>
+
+        <!-- Fila 8 -->
+        <field name="invNetAmountFrom"     title="Net Amount From"      position="1"><text-find/></field>
+        <field name="invNetAmountTo"       title="Net Amount To"        position="2"><text-find/></field>
+
+        <!-- Fila 9 -->
+        <field name="invConfirmed"         title="Confirmed"            position="1">
+            <drop-down allow-empty="true">
+                <option key="Y" description="${uiLabelMap.CommonYes}"/>
+                <option key="N" description="${uiLabelMap.CommonNo}"/>
+            </drop-down>
+        </field>
+        <field name="invPaymentDone"       title="Payment Done"         position="2">
             <drop-down allow-empty="true">
                 <option key="Y" description="${uiLabelMap.CommonYes}"/>
                 <option key="N" description="${uiLabelMap.CommonNo}"/>
             </drop-down>
         </field>
 
-        <field name="invPaymentDone" title="Payment Done">
-            <drop-down allow-empty="true">
-                <option key="Y" description="${uiLabelMap.CommonYes}"/>
-                <option key="N" description="${uiLabelMap.CommonNo}"/>
-            </drop-down>
-        </field>
-
-        <!-- Acciones -->
-        <field name="submitButton" title="${uiLabelMap.CommonFind}" widget-style="smallSubmit"><submit/></field>
-        <field name="clearButton" title=" " widget-style="smallSubmit">
+        <!-- Fila 10: botones a la derecha -->
+        <field name="submitButton" title="${uiLabelMap.CommonFind}" position="3" widget-style="smallSubmit"><submit/></field>
+        <field name="clearButton"  title=" "                        position="4" widget-style="smallSubmit">
             <hyperlink target="findInvoices" description="${uiLabelMap.CommonClear}"/>
         </field>
     </form>
 
+
     <!-- ======================= -->
     <!-- Lista (usa performFind) -->
     <!-- ======================= -->
-    <form name="ListInvoicesForm" type="list" list-name="entityList"
+    <form name="ListInvoicesForm"
+          type="list"
+          list-name="entityList"
+          paginate="true"
           paginate-target="findInvoices"
-          odd-row-style="alt-row" even-row-style="row-style"
-          header-row-style="header-row-2" default-table-style="basic-table">
+          paginate-index-field="viewIndex"
+          paginate-size-field="viewSize"
+          odd-row-style="alt-row"
+          even-row-style="row-style"
+          header-row-style="header-row-2"
+          default-table-style="basic-table">
 
         <actions>
             <!-- Permitir listar sin filtros -->
@@ -94,7 +113,7 @@
 
         <!-- Columnas ordenables -->
         <field name="invoiceId" title="${uiLabelMap.InvoiceInvoiceId}" sort-field="true">
-            <hyperlink target="viewInvoiceDetail" description="${invoiceId}">
+            <hyperlink target="viewInvoiceHeader" description="${invoiceId}">
                 <parameter param-name="invoiceId" from-field="invoiceId"/>
             </hyperlink>
         </field>
@@ -118,8 +137,8 @@
         <field name="invPaymentDone" title="${uiLabelMap.InvoicePaymentDone}" sort-field="true"><display/></field>
         <field name="invConfirmed" title="${uiLabelMap.InvoiceConfirmed}" sort-field="true"><display/></field>
 
-        <field name="view" title=" ">
-            <hyperlink target="viewInvoiceDetail" description="${uiLabelMap.CommonView}">
+        <field name="view" title=" " widget-style="smallSubmit">
+            <hyperlink target="viewInvoiceLines" description="Lines">
                 <parameter param-name="invoiceId" from-field="invoiceId"/>
             </hyperlink>
         </field>
@@ -155,7 +174,11 @@
         </actions>
 
         <!-- mismas columnas que la lista anterior -->
-        <field name="invoiceId" title="${uiLabelMap.InvoiceInvoiceId}" sort-field="true"><display/></field>
+        <field name="invoiceId" title="${uiLabelMap.InvoiceInvoiceId}" sort-field="true">
+            <hyperlink target="viewInvoiceHeader" description="${invoiceId}">
+                <parameter param-name="invoiceId" from-field="invoiceId"/>
+            </hyperlink>
+        </field>
         <field name="invSupplierCode" title="${uiLabelMap.InvoiceSupplierCode}" sort-field="true"><display/></field>
         <field name="invSupplierName" title="${uiLabelMap.InvoiceSupplierName}" sort-field="true"><display/></field>
         <field name="invSupplierVatNumber" title="${uiLabelMap.InvoiceSupplierVatNumber}" sort-field="true"><display/></field>
@@ -175,8 +198,8 @@
         <field name="invPaymentDone" title="${uiLabelMap.InvoicePaymentDone}" sort-field="true"><display/></field>
         <field name="invConfirmed" title="${uiLabelMap.InvoiceConfirmed}" sort-field="true"><display/></field>
 
-        <field name="view" title="${uiLabelMap.CommonView}">
-            <hyperlink target="viewInvoiceDetail" description="${uiLabelMap.CommonView}">
+        <field name="view" title="${uiLabelMap.CommonView}" widget-style="smallSubmit">
+            <hyperlink target="viewInvoiceLines" description="Lines">
                 <parameter param-name="invoiceId" from-field="invoiceId"/>
             </hyperlink>
         </field>

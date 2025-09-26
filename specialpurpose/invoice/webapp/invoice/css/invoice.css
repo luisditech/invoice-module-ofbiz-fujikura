@@ -1,0 +1,27 @@
+/* Caja del buscador */
+.screenlet.inv-search { margin: 10px 0; border-radius: 6px; }
+.screenlet.inv-search .screenlet-title-bar { padding: 8px 12px; }
+.screenlet.inv-search .screenlet-body { padding: 12px; }
+
+/* Tabla del form con separación y mejor legibilidad */
+table.inv-search-grid { width: 100%; border-collapse: separate; border-spacing: 6px 8px; }
+table.inv-search-grid td { vertical-align: middle; }
+
+/* Título a la izquierda un poco más fuerte y alineado */
+.inv-label { font-weight: 600; white-space: nowrap; padding-right: 6px; }
+
+/* Inputs “full-width” sin romper el layout */
+.inv-input input[type="text"],
+.inv-input input[type="number"],
+.inv-input input[type="date"],
+.inv-input select { width: 260px; max-width: 100%; }
+
+/* Quita “Ignore case” y combos de operador (si tu macro no soporta hide-options) */
+.screenlet.inv-search .field-ic,
+.screenlet.inv-search label[for$="_ic"],
+.screenlet.inv-search select[name$="_op"] { display: none !important; }
+
+/* Botones alineados a la derecha */
+table.inv-search-grid .smallSubmit { margin-right: 6px; }
+
+body { outline: 4px solid magenta !important; }
