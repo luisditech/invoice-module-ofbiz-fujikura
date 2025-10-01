@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<screens xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xmlns="http://ofbiz.apache.org/Widget-Screen"
+<screens xmlns="http://ofbiz.apache.org/Widget-Screen"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://ofbiz.apache.org/Widget-Screen http://ofbiz.apache.org/dtds/widget-screen.xsd">
 
     <!-- ================= -->
@@ -70,12 +70,13 @@
                     <actions>
                         <!-- Paginación en el CONTEXTO RAÍZ -->
                         <set field="viewIndex" from-field="parameters.viewIndex" default-value="0"/>
-                        <set field="viewSize"  from-field="parameters.viewSize"  default-value="10"/>
+                        <set field="viewSize" from-field="parameters.viewSize" default-value="10"/>
                         <!-- Para que el combo del buscador muestre el valor actual -->
                         <set field="parameters.viewSize" from-field="parameters.viewSize" default-value="10"/>
                     </actions>
                     <widgets>
-                        <include-form name="ListInvoicesFormFull" location="component://invoice/widget/forms/InvoiceForms.xml"/>
+                        <include-form name="ListInvoicesFormFull"
+                                      location="component://invoice/widget/forms/InvoiceForms.xml"/>
                     </widgets>
                 </section>
 
@@ -107,12 +108,13 @@
                     <actions>
                         <!-- Paginación en el CONTEXTO RAÍZ -->
                         <set field="viewIndex" from-field="parameters.viewIndex" default-value="0"/>
-                        <set field="viewSize"  from-field="parameters.viewSize"  default-value="10"/>
+                        <set field="viewSize" from-field="parameters.viewSize" default-value="10"/>
                         <!-- Para que el combo del buscador muestre el valor actual -->
                         <set field="parameters.viewSize" from-field="parameters.viewSize" default-value="10"/>
                     </actions>
                     <widgets>
-                        <include-form name="ListInvoicesForm" location="component://invoice/widget/forms/InvoiceForms.xml"/>
+                        <include-form name="ListInvoicesForm"
+                                      location="component://invoice/widget/forms/InvoiceForms.xml"/>
                     </widgets>
                 </section>
 
@@ -173,7 +175,9 @@
 
                         <!-- Si NO existe la factura -->
                         <section>
-                            <condition><if-empty field="invoice"/></condition>
+                            <condition>
+                                <if-empty field="invoice"/>
+                            </condition>
                             <widgets>
                                 <label style="required-field" text="Invoice not found"/>
                                 <container>
@@ -184,23 +188,77 @@
 
                         <!-- Si SÍ existe la factura: mostrar cabecera -->
                         <section>
-                            <condition><not><if-empty field="invoice"/></not></condition>
+                            <condition>
+                                <not>
+                                    <if-empty field="invoice"/>
+                                </not>
+                            </condition>
                             <widgets>
-                                <container>
-                                    <link text="${uiLabelMap.CommonPrint}" style="buttontext"
-                                          target="javascript:window.print();" url-mode="plain"/>
+
+                                <!-- ========== General ========== -->
+                                <container style="screenlet inv-section">
+                                    <container style="screenlet-title-bar">
+                                        <label text="General Invoice Information"/>
+                                    </container>
+                                    <container style="screenlet-body">
+                                        <include-form location="component://invoice/widget/forms/InvoiceForms.xml"
+                                                      name="ViewInv_General"/>
+                                    </container>
                                 </container>
 
-                                <!-- Form de detalle: usa default-map-name="invoice" -->
-                                <include-form location="component://invoice/widget/forms/InvoiceForms.xml"
-                                              name="ViewInvoiceForm"/>
+                                <!-- ========== Supplier ========== -->
+                                <container style="screenlet inv-section">
+                                    <container style="screenlet-title-bar">
+                                        <label text="Supplier Information"/>
+                                    </container>
+                                    <container style="screenlet-body">
+                                        <include-form location="component://invoice/widget/forms/InvoiceForms.xml"
+                                                      name="ViewInv_Supplier"/>
+                                    </container>
+                                </container>
 
+                                <!-- ========== Monetary ========== -->
+                                <container style="screenlet inv-section">
+                                    <container style="screenlet-title-bar">
+                                        <label text="Monetary Details"/>
+                                    </container>
+                                    <container style="screenlet-body">
+                                        <include-form location="component://invoice/widget/forms/InvoiceForms.xml"
+                                                      name="ViewInv_Monetary"/>
+                                    </container>
+                                </container>
+
+                                <!-- ========== Tax & Payment ========== -->
+                                <container style="screenlet inv-section">
+                                    <container style="screenlet-title-bar">
+                                        <label text="Tax and Payment Information"/>
+                                    </container>
+                                    <container style="screenlet-body">
+                                        <include-form location="component://invoice/widget/forms/InvoiceForms.xml"
+                                                      name="ViewInv_TaxPayment"/>
+                                    </container>
+                                </container>
+
+                                <!-- ========== Audit ========== -->
+                                <container style="screenlet inv-section">
+                                    <container style="screenlet-title-bar">
+                                        <label text="Audit Information"/>
+                                    </container>
+                                    <container style="screenlet-body">
+                                        <include-form location="component://invoice/widget/forms/InvoiceForms.xml"
+                                                      name="ViewInv_Audit"/>
+                                    </container>
+                                </container>
+
+                                <!-- botones abajo -->
                                 <container style="buttons">
+                                    <link text="Generar PDF" style="buttontext" target="javascript:window.print();"
+                                          url-mode="plain"/>
                                     <link target="findInvoices" text="${uiLabelMap.CommonBack}" style="buttontext"/>
                                 </container>
+
                             </widgets>
                         </section>
-
                     </decorator-section>
                 </decorator-screen>
             </widgets>
@@ -213,7 +271,7 @@
     <screen name="ViewInvoice">
         <section>
             <actions>
-                <!-- Etiquetas comunes y del módulo -->
+                <!-- Etiquetas -->
                 <property-map resource="CommonUiLabels"  map-name="uiLabelMap" global="true"/>
                 <property-map resource="InvoiceUiLabels" map-name="uiLabelMap" global="true"/>
 
@@ -231,10 +289,10 @@
                     <field-map field-name="userLogin" from-field="userLogin"/>
                 </service>
 
-                <!-- (Opcional) deja la lista explícita por si tu script la usa -->
+                <!-- Pásalo explícito para el script -->
                 <set field="invoiceLines" from-field="findLines.listIt"/>
 
-                <!-- Totales y/o otros cálculos -->
+                <!-- Totales -->
                 <script location="component://invoice/scripts/computeInvoiceTotals.groovy"/>
             </actions>
 
@@ -243,27 +301,82 @@
                     <decorator-section name="body">
                         <section>
                             <widgets>
-                                <container>
-                                    <link text="${uiLabelMap.CommonPrint}" style="buttontext"
-                                          target="javascript:window.print();" url-mode="plain"/>
+
+                                <!-- ====== Resumen compacto (mock) ====== -->
+                                <container style="screenlet inv-section inv-summary-card">
+                                    <container style="screenlet-title-bar">
+                                        <label text="Invoice Details"/>
+                                    </container>
+                                    <container style="screenlet-body">
+                                        <include-form location="component://invoice/widget/forms/InvoiceForms.xml"
+                                                      name="InvoiceSummary"/>
+                                    </container>
                                 </container>
 
-                                <!-- Detalle factura -->
-                                <include-form location="component://invoice/widget/forms/InvoiceForms.xml"
-                                              name="ViewInvoiceForm"/>
+                                <!-- ====== Invoice Lines (lista + totales) ====== -->
+                                <container style="screenlet inv-section">
+                                    <container style="screenlet-title-bar">
+                                        <label text="Invoice Line Items"/>
+                                    </container>
+                                    <container style="screenlet-body">
 
-                                <!-- Líneas -->
-                                <label text="Invoice Line Items" style="h3"/>
-                                <include-form location="component://invoice/widget/forms/InvoiceForms.xml"
-                                              name="ListInvoiceLines"/>
+                                        <!-- Si no hay líneas -->
+                                        <section>
+                                            <condition><if-empty field="invoiceLines"/></condition>
+                                            <widgets>
+                                                <label style="required-field" text="No line items found for this invoice."/>
+                                            </widgets>
+                                        </section>
 
+                                        <!-- Lista -->
+                                        <include-form location="component://invoice/widget/forms/InvoiceForms.xml"
+                                                      name="ListInvoiceLines"/>
+
+                                        <!-- Totales -->
+                                        <section>
+                                            <condition><not><if-empty field="totalsList"/></not></condition>
+                                            <widgets>
+                                                <include-form location="component://invoice/widget/forms/InvoiceForms.xml"
+                                                              name="InvoiceLinesTotals"/>
+                                            </widgets>
+                                        </section>
+
+                                    </container>
+                                </container>
+
+                                <!-- Botones -->
                                 <container style="buttons">
+                                    <link text="Generar PDF" style="buttontext" target="javascript:window.print();" url-mode="plain"/>
                                     <link target="findInvoices" text="${uiLabelMap.CommonBack}" style="buttontext"/>
                                 </container>
+
                             </widgets>
                         </section>
                     </decorator-section>
                 </decorator-screen>
+            </widgets>
+        </section>
+    </screen>
+
+    <!-- ============================== -->
+    <!-- Pantalla: edición rápida línea -->
+    <!-- ============================== -->
+    <screen name="EditInvoiceLineQuick">
+        <section>
+            <actions>
+                <property-map resource="CommonUiLabels"  map-name="uiLabelMap" global="true"/>
+                <property-map resource="InvoiceUiLabels" map-name="uiLabelMap" global="true"/>
+                <entity-one entity-name="FinInvoiceLine" value-field="line">
+                    <field-map field-name="invoiceId"        from-field="parameters.invoiceId"/>
+                    <field-map field-name="invoiceLineSeqId" from-field="parameters.invoiceLineSeqId"/>
+                </entity-one>
+                <!-- Refijar PKs por si acaso -->
+                <set field="parameters.invoiceId"        from-field="line.invoiceId"/>
+                <set field="parameters.invoiceLineSeqId" from-field="line.invoiceLineSeqId"/>
+            </actions>
+            <widgets>
+                <include-form location="component://invoice/widget/forms/InvoiceForms.xml"
+                              name="EditInvoiceLineQuick"/>
             </widgets>
         </section>
     </screen>
@@ -295,7 +408,8 @@
         <section>
             <widgets>
                 <label text="Edit Invoice Line"/>
-                <include-form name="EditInvoiceLineForm" location="component://invoice/widget/forms/InvoiceForms.xml"/>
+                <include-form name="EditInvoiceLineQuick"
+                              location="component://invoice/widget/forms/InvoiceForms.xml"/>
             </widgets>
         </section>
     </screen>

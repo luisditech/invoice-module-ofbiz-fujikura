@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<site-conf xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-           xmlns="http://ofbiz.apache.org/Site-Conf"
+<site-conf xmlns="http://ofbiz.apache.org/Site-Conf"
+           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
            xsi:schemaLocation="http://ofbiz.apache.org/Site-Conf http://ofbiz.apache.org/dtds/site-conf.xsd">
 
     <!-- The controller elements that are common to all OFBiz components
@@ -52,25 +52,17 @@
         <response name="success" type="view" value="ViewInvoiceHeader"/>
     </request-map>
 
-    <view-map name="ViewInvoiceHeader"
-              type="screen"
-              page="component://invoice/widget/screens/InvoiceScreens.xml#ViewInvoiceHeader"/>
-
     <!-- view (detalle) -->
     <!-- Soporta ambos targets usados en la UI: 'viewInvoiceDetail' y 'viewInvoice' -->
     <request-map uri="viewInvoiceDetail">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="ViewInvoiceDetail"/>
     </request-map>
-    <view-map name="ViewInvoiceDetail" type="screen"
-              page="component://invoice/widget/screens/InvoiceScreens.xml#ViewInvoiceHeader"/>
 
     <request-map uri="viewInvoiceLines">
         <security https="true" auth="true"/>
         <response name="success" type="view" value="ViewInvoiceLines"/>
     </request-map>
-    <view-map name="ViewInvoiceLines" type="screen"
-              page="component://invoice/widget/screens/InvoiceScreens.xml#ViewInvoice"/>
 
     <request-map uri="viewInvoice">
         <security https="true" auth="true"/>
@@ -138,11 +130,47 @@
         <response name="error"   type="view" value="viewViewInvoice"/>
     </request-map>
 
+    <!-- Abre el formulario de edición rápida -->
+    <request-map uri="editInvoiceLineQuick">
+        <security https="true" auth="true"/>
+        <response name="success" type="view" value="EditInvoiceLineQuick"/>
+    </request-map>
+
+    <!-- Ejecuta el update usando el service estándar updateFinInvoiceLine -->
+    <request-map uri="updateFinInvoiceLineQuick">
+        <security https="true" auth="true"/>
+        <event type="service" invoke="updateFinInvoiceLine"/>
+
+        <!-- OK -->
+        <response name="success" type="request-redirect" value="viewInvoiceLines">
+            <!-- coge el OUT del service (tu field-to-result deja 'invoiceId' en el contexto) -->
+            <redirect-parameter name="invoiceId" from-field="invoiceId"/>
+        </response>
+
+        <!-- Error (por si el service no devuelve OUT) -->
+        <response name="error" type="request-redirect" value="viewInvoiceLines">
+            <!-- tira del parámetro de entrada -->
+            <redirect-parameter name="invoiceId" from-field="parameters.invoiceId"/>
+            <redirect-parameter name="errorMessage" from-field="_ERROR_MESSAGE_"/>
+        </response>
+    </request-map>
+
+
     <!-- ************* -->
     <!-- ************* -->
     <!-- View Mappings -->
     <!-- ************* -->
     <!-- ************* -->
+
+    <view-map name="ViewInvoiceHeader"
+              type="screen"
+              page="component://invoice/widget/screens/InvoiceScreens.xml#ViewInvoiceHeader"/>
+
+    <view-map name="ViewInvoiceDetail" type="screen"
+              page="component://invoice/widget/screens/InvoiceScreens.xml#ViewInvoiceHeader"/>
+
+    <view-map name="ViewInvoiceLines" type="screen"
+              page="component://invoice/widget/screens/InvoiceScreens.xml#ViewInvoice"/>
 
     <!-- main -->
     <view-map name="main" type="screen" page="component://invoice/widget/screens/InvoiceScreens.xml#main"/>
@@ -156,7 +184,14 @@
     <!-- Invoice / edit -->
     <view-map name="viewEditInvoice" type="screen" page="component://invoice/widget/screens/InvoiceScreens.xml#EditInvoice"/>
 
-    <!-- InvoiceLine / edit -->
-    <view-map name="viewEditInvoiceLine" type="screen" page="component://invoice/widget/screens/InvoiceScreens.xml#EditInvoiceLine"/>
+    <!-- InvoiceLine / edit -->    <!-- InvoiceLine / edit -->
+    <view-map name="viewEditInvoiceLine"
+              type="screen"
+              page="component://invoice/widget/screens/InvoiceScreens.xml#EditInvoiceLine"/>
+
+    <!-- Vista (screen) que muestra el form de edición -->
+    <view-map name="EditInvoiceLineQuick"
+              type="screen"
+              page="component://invoice/widget/screens/InvoiceScreens.xml#EditInvoiceLineQuick"/>
 
 </site-conf>

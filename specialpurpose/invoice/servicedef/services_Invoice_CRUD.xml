@@ -48,7 +48,7 @@
              auth="true">
         <description>Create FinInvoiceLine</description>
         <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
-        <auto-attributes include="nonpk" entity-name="FinInvoiceLine" mode="IN"/>
+        <auto-attributes include="nonpk" entity-name="FinInvoiceLine" mode="IN" optional="true"/>
         <attribute name="invoiceLineSeqId" type="String" mode="OUT" optional="true"/>
     </service>
 
@@ -56,12 +56,20 @@
              engine="simple"
              location="component://invoice/minilang/InvoiceServices.xml"
              invoke="updateFinInvoiceLine"
-             auth="true">
+             auth="true"
+             use-transaction="true"
+             validate="false">
         <description>Update FinInvoiceLine</description>
+
         <attribute name="invoiceId" type="String" mode="IN" optional="false"/>
         <attribute name="invoiceLineSeqId" type="String" mode="IN" optional="false"/>
-        <auto-attributes include="nonpk" entity-name="FinInvoiceLine" mode="IN"/>
+
+        <auto-attributes include="nonpk"
+                         entity-name="FinInvoiceLine"
+                         mode="IN"
+                         optional="true"/>
     </service>
+
 
     <service name="deleteFinInvoiceLine"
              engine="simple"

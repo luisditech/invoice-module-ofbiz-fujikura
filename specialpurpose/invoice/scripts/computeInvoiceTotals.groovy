@@ -1,32 +1,55 @@
-/*
- * Calcula totales de las líneas y deja en contexto:
- *  - invoiceLines: List<GenericValue> (no iterador)
- *  - totalsList  : List<Map> con una fila de totales para el form InvoiceLinesTotals
- */
-def it = context.findLines?.listIt
-List lines = []
-if (it) {
-    lines = it.getCompleteList()
-    it.close()
+import java.math.BigDecimal
+import org.apache.ofbiz.entity.GenericValue
+import org.apache.ofbiz.entity.util.EntityListIterator
+
+def linesSource = context.invoiceLines ?: context.findLines?.listIt
+List<GenericValue> lines = []
+
+if (linesSource) {
+    if (linesSource instanceof EntityListIterator) {
+        EntityListIterator eli = (EntityListIterator) linesSource
+        try {
+            GenericValue row
+            while ((row = eli.next()) != null) {
+                lines.add(row)
+            }
+        } finally {
+            try { eli.close() } catch (ignored) {}
+        }
+        if (context.findLines) {
+            context.findLines.listIt = null       // ← MUY IMPORTANTE
+            context.findLines.list   = lines      // ← opcional, por comodidad
+        }
+    } else if (linesSource instanceof List) {
+        lines = (List<GenericValue>) linesSource
+    } else if (linesSource.metaClass.respondsTo(linesSource, "getCompleteList")) {
+        try {
+            lines = (List<GenericValue>) linesSource.getCompleteList()
+        } finally {
+            if (linesSource instanceof Closeable) {
+                try { linesSource.close() } catch (ignored) {}
+            }
+        }
+        if (context.findLines) {
+            context.findLines.listIt = null
+            context.findLines.list   = lines
+        }
+    }
 }
 
-// Exponer la lista para el form ListInvoiceLines
 context.invoiceLines = lines
 
-// Totales
-BigDecimal totalNet = BigDecimal.ZERO
-BigDecimal totalWithVat = BigDecimal.ZERO
+BigDecimal ZERO = BigDecimal.ZERO
+BigDecimal totalNet = ZERO
+BigDecimal totalWithVat = ZERO
 
-lines.each { gv ->
-    def net = gv.get("lineNetAmount")
-    def with = gv.get("lineTotalAmountWithVat")
-    if (net != null) totalNet = totalNet.add(gv.getBigDecimal("lineNetAmount"))
-    if (with != null) totalWithVat = totalWithVat.add(gv.getBigDecimal("lineTotalAmountWithVat"))
+for (GenericValue gv : lines) {
+    totalNet     = totalNet.add(gv.getBigDecimal("lineNetAmount") ?: ZERO)
+    totalWithVat = totalWithVat.add(gv.getBigDecimal("lineTotalAmountWithVat") ?: ZERO)
 }
 
-// Fila para el form de totales
 context.totalsList = [[
-                              totalsLabel : "Total Net Amount:",
-                              totalNet    : totalNet,
-                              totalWithVat: totalWithVat
+                              totalsLabel  : "Totals",
+                              totalNet     : totalNet,
+                              totalWithVat : totalWithVat
                       ]]

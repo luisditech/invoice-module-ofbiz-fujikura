@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+    <!-- Tipos -->
+    <EnumerationType enumTypeId="INV_COST_CENTER" description="Invoice Cost Center"/>
+    <EnumerationType enumTypeId="INV_BRANCH"      description="Invoice Branch"/>
+    <EnumerationType enumTypeId="INV_PROJECT"     description="Invoice Project"/>
+    <EnumerationType enumTypeId="INV_SECTION"     description="Invoice Section"/>
+
+    <!-- Cost Center -->
+    <Enumeration enumId="CC001" enumTypeId="INV_COST_CENTER" sequenceId="01" description="CC001"/>
+    <Enumeration enumId="CC002" enumTypeId="INV_COST_CENTER" sequenceId="02" description="CC002"/>
+    <Enumeration enumId="CC003" enumTypeId="INV_COST_CENTER" sequenceId="03" description="CC003"/>
+    <Enumeration enumId="CC004" enumTypeId="INV_COST_CENTER" sequenceId="04" description="CC004"/>
+    <Enumeration enumId="CC005" enumTypeId="INV_COST_CENTER" sequenceId="05" description="CC005"/>
+    <Enumeration enumId="CC006" enumTypeId="INV_COST_CENTER" sequenceId="06" description="CC006"/>
+
+    <!-- Branch -->
+    <Enumeration enumId="BR_MAIN"  enumTypeId="INV_BRANCH" sequenceId="01" description="Main"/>
+    <Enumeration enumId="BR_NORTH" enumTypeId="INV_BRANCH" sequenceId="02" description="North"/>
+    <Enumeration enumId="BR_SOUTH" enumTypeId="INV_BRANCH" sequenceId="03" description="South"/>
+    <Enumeration enumId="BR_EAST"  enumTypeId="INV_BRANCH" sequenceId="04" description="East"/>
+
+    <!-- Project -->
+    <Enumeration enumId="PRJ_ALPHA"           enumTypeId="INV_PROJECT" sequenceId="01" description="Project Alpha"/>
+    <Enumeration enumId="PRJ_BETA"            enumTypeId="INV_PROJECT" sequenceId="02" description="Project Beta"/>
+    <Enumeration enumId="PRJ_GAMMA"           enumTypeId="INV_PROJECT" sequenceId="03" description="Project Gamma"/>
+    <Enumeration enumId="PRJ_INTERNAL_IT"     enumTypeId="INV_PROJECT" sequenceId="04" description="Internal IT"/>
+    <Enumeration enumId="PRJ_NETWORK_UPGRADE" enumTypeId="INV_PROJECT" sequenceId="05" description="Network Upgrade"/>
+    <Enumeration enumId="PRJ_SOFTWARE_ROLLOUT" enumTypeId="INV_PROJECT" sequenceId="06" description="Software Rollout"/>
+
+    <!-- Section -->
+    <Enumeration enumId="SEC_HARDWARE"     enumTypeId="INV_SECTION" sequenceId="01" description="Hardware"/>
+    <Enumeration enumId="SEC_ACCESSORIES"  enumTypeId="INV_SECTION" sequenceId="02" description="Accessories"/>
+    <Enumeration enumId="SEC_STORAGE"      enumTypeId="INV_SECTION" sequenceId="03" description="Storage"/>
+    <Enumeration enumId="SEC_PERIPHERALS"  enumTypeId="INV_SECTION" sequenceId="04" description="Peripherals"/>
+    <Enumeration enumId="SEC_NETWORKING"   enumTypeId="INV_SECTION" sequenceId="05" description="Networking"/>
+    <Enumeration enumId="SEC_CABLES"       enumTypeId="INV_SECTION" sequenceId="06" description="Cables"/>
+    <Enumeration enumId="SEC_SOFTWARE"     enumTypeId="INV_SECTION" sequenceId="07" description="Software"/>
+</entity-engine-xml>
