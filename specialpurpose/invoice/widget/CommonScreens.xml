@@ -12,6 +12,7 @@
                 <set field="layoutSettings.companyName" from-field="uiLabelMap.InvoiceCompanyName" global="true"/>
                 <set field="layoutSettings.companySubtitle" from-field="uiLabelMap.InvoiceCompanySubtitle" global="true"/>
 
+                <set field="layoutSettings.styleSheets[]" value="/invoice/static/css/invoice.css" global="true"/>
                 <set field="activeApp" value="Invoice" global="true"/>
                 <set field="applicationMenuName" value="MainAppBar" global="true"/>
                 <set field="applicationMenuLocation" value="component://invoice/widget/InvoiceMenus.xml" global="true"/>
@@ -28,14 +29,14 @@
             <widgets>
                 <decorator-screen name="main-decorator" location="component://invoice/widget/CommonScreens.xml">
 
-                    <!-- INYECCIÓN EN <head> -->
+                    <!-- INYECCIÓN EN <head>
                     <decorator-section name="head">
                         <platform-specific>
                             <html>
                                 <html-template location="component://invoice/webapp/invoice/includes/invoice-head.ftl"/>
                             </html>
                         </platform-specific>
-                    </decorator-section>
+                    </decorator-section>-->
 
                     <!-- Cuerpo -->
                     <decorator-section name="body">

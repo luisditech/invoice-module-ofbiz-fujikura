@@ -5,14 +5,13 @@
     <!-- ========================= -->
     <!-- Filtro de búsqueda (single) -->
     <!-- ========================= -->
-    <!-- ========================= -->
-    <!-- Buscador en grilla (3 por fila, sin CSS) -->
-    <!-- ========================= -->
     <form name="FindInvoicesForm"
           type="single"
           target="findInvoices"
           default-table-style="condensed-table"
-          header-row-style="header-row-single">
+          header-row-style="header-row-single"
+          default-title-style="inv-label"
+          default-widget-style="inv-input">
 
         <!-- Necesario para performFind / prepareFind -->
         <field name="entityName">

@@ -34,13 +34,11 @@
             <widgets>
 
                 <!-- Caja del buscador -->
-                <container style="screenlet inv-search">
-                    <container style="screenlet-title-bar">
-                        <label text="Búscar Facturas" style="h3"/>
-                    </container>
+                <container style="screenlet inv-section inv-search">
+                    <container style="screenlet-title-bar"><label text="Buscar Facturas"/></container>
                     <container style="screenlet-body">
-                        <include-form name="FindInvoicesForm"
-                                      location="component://invoice/widget/forms/InvoiceForms.xml"/>
+                        <include-form location="component://invoice/widget/forms/InvoiceForms.xml"
+                                      name="FindInvoicesForm"/>
                     </container>
                 </container>
 

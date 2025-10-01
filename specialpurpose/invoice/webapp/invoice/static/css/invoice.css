@@ -1,0 +1,23 @@
+/* Bloques tipo screenlet */
+.screenlet.inv-summary-card .screenlet-title-bar {
+  background: #e8f2ff;
+  border-bottom: 1px solid #bfd6ff;
+}
+.screenlet.inv-summary-card .screenlet-body {
+  background: #f7faff;
+}
+
+/* Grilla de “InvoiceSummary” (2-3 columnas) */
+table.basic-table, table.condensed-table { width: 100%; }
+.inv-label { font-weight: 600; white-space: nowrap; padding-right: 6px; }
+.inv-input input[type="text"],
+.inv-input input[type="number"],
+.inv-input input[type="date"],
+.inv-input select { max-width: 100%; }
+
+/* Tabla de líneas: un poco de aire */
+.tablehead { background: #f3f6fb; }
+tr.alternate-row { background: #fbfcff; }
+
+
+
