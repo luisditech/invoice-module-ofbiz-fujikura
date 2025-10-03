@@ -131,9 +131,9 @@
     <!-- FinInvoiceLine - UPDATE   -->
     <!-- ========================= -->
     <simple-method method-name="updateFinInvoiceLine" short-description="Update FinInvoiceLine">
-        <!--<check-permission permission="INVOICE" action="_UPDATE">
-            <fail-property resource="CommonUiLabels" property="CommonGenericPermissionError"/>
-        </check-permission>-->
+        <check-permission permission="INVOICE_UPDATE">
+            <fail-message message="No permission to update invoice lines."/>
+        </check-permission>
         <check-errors/>
 
         <entity-and entity-name="FinInvoiceLine" list="finInvoiceLines">

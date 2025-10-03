@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<entity-engine-xml>
+
+    <!-- ===== Permisos atómicos ===== -->
+    <SecurityPermission permissionId="INVOICE_VIEW"   description="View invoices and lines"/>
+    <SecurityPermission permissionId="INVOICE_UPDATE" description="Update invoice lines and editable fields"/>
+
+    <!-- ===== Grupos (perfiles) ===== -->
+    <SecurityGroup groupId="INVOICE_READER"      description="Invoice reader (view-only)"/>
+    <SecurityGroup groupId="INVOICE_MODIFICATOR" description="Invoice editor (can update)"/>
+
+    <!-- ===== Asignación permisos → grupos ===== -->
+    <SecurityGroupPermission groupId="INVOICE_READER"      permissionId="INVOICE_VIEW"/>
+    <SecurityGroupPermission groupId="INVOICE_MODIFICATOR" permissionId="INVOICE_VIEW"/>
+    <SecurityGroupPermission groupId="INVOICE_MODIFICATOR" permissionId="INVOICE_UPDATE"/>
+
+    <!-- ===== Asignación grupos → usuario admin ===== -->
+    <UserLoginSecurityGroup userLoginId="admin" groupId="INVOICE_READER"      fromDate="2000-01-01 00:00:00.000"/>
+    <UserLoginSecurityGroup userLoginId="admin" groupId="INVOICE_MODIFICATOR" fromDate="2000-01-01 00:00:00.000"/>
+
+    <!-- Party + UserLogin mínimos -->
+    <Person partyId="DemoInvUser" firstName="Invoice" lastName="Reader"/>
+    <UserLogin userLoginId="invreader" partyId="DemoInvUser" currentPassword="ofbiz" enabled="Y"/>
+
+    <!-- Asigna perfil lector -->
+    <UserLoginSecurityGroup userLoginId="invreader" groupId="INVOICE_READER" fromDate="2025-01-01 00:00:00.000"/>
+
+    <!-- editor -->
+    <Person partyId="DemoInvEditor" firstName="Invoice" lastName="Editor"/>
+    <UserLogin userLoginId="inveditor" partyId="DemoInvEditor" currentPassword="ofbiz" enabled="Y"/>
+    <UserLoginSecurityGroup userLoginId="inveditor" groupId="INVOICE_MODIFICATOR" fromDate="2025-01-01 00:00:00.000"/>
+
+
+</entity-engine-xml>

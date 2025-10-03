@@ -465,7 +465,7 @@
         </field>
         <!-- edit line -->
         <!-- InvoiceForms.xml  → ListInvoiceLines -->
-        <field name="edit" title=" " widget-style="smallSubmit">
+        <field name="edit" title=" " widget-style="smallSubmit" use-when="security.hasPermission('INVOICE_UPDATE', session)">
             <hyperlink target="editInvoiceLineQuick"
                        description="✎"
                        link-type="layered-modal"
@@ -658,8 +658,14 @@
         <!-- Proof (texto libre) -->
         <field name="lineProof" title="Proof"><text/></field>
 
+
+
         <!-- Cost Center -->
-        <field name="lineCc" title="Cost Center">
+        <field name="lineCc" title="Cost Center" use-when="!security.hasPermission('INVOICE_UPDATE', session)">
+            <display/>
+        </field>
+
+        <field name="lineCc" title="Cost Center" use-when="security.hasPermission('INVOICE_UPDATE', session)">
             <drop-down allow-empty="true">
                 <entity-options
                         entity-name="Enumeration"
@@ -671,7 +677,11 @@
         </field>
 
         <!-- Branch -->
-        <field name="lineBranch" title="Branch">
+        <field name="lineBranch" title="Branch" use-when="!security.hasPermission('INVOICE_UPDATE', session)">
+            <display/>
+        </field>
+
+        <field name="lineBranch" title="Branch" use-when="security.hasPermission('INVOICE_UPDATE', session)">
             <drop-down allow-empty="true">
                 <entity-options
                         entity-name="Enumeration"
@@ -684,7 +694,11 @@
         </field>
 
         <!-- Project -->
-        <field name="lineProject" title="Project">
+        <field name="lineProject" title="Project" use-when="!security.hasPermission('INVOICE_UPDATE', session)">
+            <display/>
+        </field>
+
+        <field name="lineProject" title="Project" use-when="security.hasPermission('INVOICE_UPDATE', session)">
             <drop-down allow-empty="true">
                 <entity-options
                         entity-name="Enumeration"
@@ -697,7 +711,11 @@
         </field>
 
         <!-- Section -->
-        <field name="lineSection" title="Section">
+        <field name="lineSection" title="Section" use-when="!security.hasPermission('INVOICE_UPDATE', session)">
+            <display/>
+        </field>
+
+        <field name="lineSection" title="Section" use-when="security.hasPermission('INVOICE_UPDATE', session)">
             <drop-down allow-empty="true">
                 <entity-options
                         entity-name="Enumeration"
@@ -709,7 +727,7 @@
         </field>
 
         <!-- Botón -->
-        <field name="submitButton" title="${uiLabelMap.CommonUpdate}">
+        <field name="submitButton" title="${uiLabelMap.CommonUpdate}" use-when="security.hasPermission('INVOICE_UPDATE', session)">
             <submit/>
         </field>
     </form>
