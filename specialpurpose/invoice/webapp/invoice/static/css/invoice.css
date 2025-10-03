@@ -19,5 +19,43 @@ table.basic-table, table.condensed-table { width: 100%; }
 .tablehead { background: #f3f6fb; }
 tr.alternate-row { background: #fbfcff; }
 
+/* Contenedor con scroll horizontal */
+.table-scroll-x {
+  width: 100%;
+  overflow-x: auto;           /* <- Scroll horizontal */
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch; /* suave en móviles */
+  padding-bottom: 4px;        /* evita tapar borde inferior con la barra */
+}
 
+/* la tabla */
+.table-scroll-x > table.basic-table{ width:auto !important; min-width:var(--inv-table-min); }
 
+/* el pager debajo de la tabla */
+.table-scroll-x + .nav-pager{
+  overflow-x:auto;
+  white-space:nowrap;
+  -webkit-overflow-scrolling:touch;
+}
+
+/* estira su contenido como mínimo al mismo ancho “mínimo” */
+.table-scroll-x + .nav-pager > *{
+  display:inline-block;
+  min-width:var(--inv-table-min);
+}
+
+:root { --inv-table-min: 1500px; } /* el mismo mínimo que uses para la tabla */
+
+/* contenedor con scroll de la tabla */
+.table-scroll-x{ overflow-x:auto; overflow-y:hidden; }
+
+/* la tabla dentro del wrapper debe “salirse” */
+.table-scroll-x > table.basic-table{ width:auto !important; min-width:var(--inv-table-min); }
+
+/* el pager se hace scrolleable y con el mismo mínimo */
+.nav-pager{
+  overflow-x:auto;
+  white-space:nowrap;
+  min-width:var(--inv-table-min);
+  border-top:1px solid #dce3ea; /* cosmético */
+}

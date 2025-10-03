@@ -34,13 +34,10 @@
             <widgets>
 
                 <!-- Caja del buscador -->
-                <container style="screenlet inv-section inv-search">
-                    <container style="screenlet-title-bar"><label text="Buscar Facturas"/></container>
-                    <container style="screenlet-body">
-                        <include-form location="component://invoice/widget/forms/InvoiceForms.xml"
-                                      name="FindInvoicesForm"/>
-                    </container>
-                </container>
+                <screenlet title="Buscar Facturas" id="findScreenlet" collapsible="true" padded="false">
+                    <include-form location="component://invoice/widget/forms/InvoiceForms.xml"
+                                  name="FindInvoicesForm"/>
+                </screenlet>
 
                 <!-- Sin filtros => lista completa -->
                 <section>
@@ -73,8 +70,10 @@
                         <set field="parameters.viewSize" from-field="parameters.viewSize" default-value="10"/>
                     </actions>
                     <widgets>
-                        <include-form name="ListInvoicesFormFull"
-                                      location="component://invoice/widget/forms/InvoiceForms.xml"/>
+                        <container style="table-scroll-x">
+                            <include-grid name="ListInvoicesGridFull"
+                                          location="component://invoice/widget/forms/InvoiceForms.xml"/>
+                        </container>
                     </widgets>
                 </section>
 
@@ -111,7 +110,7 @@
                         <set field="parameters.viewSize" from-field="parameters.viewSize" default-value="10"/>
                     </actions>
                     <widgets>
-                        <include-form name="ListInvoicesForm"
+                        <include-grid name="ListInvoicesGrid"
                                       location="component://invoice/widget/forms/InvoiceForms.xml"/>
                     </widgets>
                 </section>
@@ -270,7 +269,7 @@
         <section>
             <actions>
                 <!-- Etiquetas -->
-                <property-map resource="CommonUiLabels"  map-name="uiLabelMap" global="true"/>
+                <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="InvoiceUiLabels" map-name="uiLabelMap" global="true"/>
 
                 <!-- Cabecera -->
@@ -320,22 +319,32 @@
 
                                         <!-- Si no hay líneas -->
                                         <section>
-                                            <condition><if-empty field="invoiceLines"/></condition>
+                                            <condition>
+                                                <if-empty field="invoiceLines"/>
+                                            </condition>
                                             <widgets>
-                                                <label style="required-field" text="No line items found for this invoice."/>
+                                                <label style="required-field"
+                                                       text="No line items found for this invoice."/>
                                             </widgets>
                                         </section>
 
                                         <!-- Lista -->
-                                        <include-form location="component://invoice/widget/forms/InvoiceForms.xml"
-                                                      name="ListInvoiceLines"/>
+                                        <container style="table-scroll-lines">
+                                            <include-grid location="component://invoice/widget/forms/InvoiceForms.xml"
+                                                          name="ListInvoiceLinesGrid"/>
+                                        </container>
 
                                         <!-- Totales -->
                                         <section>
-                                            <condition><not><if-empty field="totalsList"/></not></condition>
+                                            <condition>
+                                                <not>
+                                                    <if-empty field="totalsList"/>
+                                                </not>
+                                            </condition>
                                             <widgets>
-                                                <include-form location="component://invoice/widget/forms/InvoiceForms.xml"
-                                                              name="InvoiceLinesTotals"/>
+                                                <include-form
+                                                        location="component://invoice/widget/forms/InvoiceForms.xml"
+                                                        name="InvoiceLinesTotals"/>
                                             </widgets>
                                         </section>
 
@@ -344,7 +353,8 @@
 
                                 <!-- Botones -->
                                 <container style="buttons">
-                                    <link text="Generar PDF" style="buttontext" target="javascript:window.print();" url-mode="plain"/>
+                                    <link text="Generar PDF" style="buttontext" target="javascript:window.print();"
+                                          url-mode="plain"/>
                                     <link target="findInvoices" text="${uiLabelMap.CommonBack}" style="buttontext"/>
                                 </container>
 
@@ -362,14 +372,14 @@
     <screen name="EditInvoiceLineQuick">
         <section>
             <actions>
-                <property-map resource="CommonUiLabels"  map-name="uiLabelMap" global="true"/>
+                <property-map resource="CommonUiLabels" map-name="uiLabelMap" global="true"/>
                 <property-map resource="InvoiceUiLabels" map-name="uiLabelMap" global="true"/>
                 <entity-one entity-name="FinInvoiceLine" value-field="line">
-                    <field-map field-name="invoiceId"        from-field="parameters.invoiceId"/>
+                    <field-map field-name="invoiceId" from-field="parameters.invoiceId"/>
                     <field-map field-name="invoiceLineSeqId" from-field="parameters.invoiceLineSeqId"/>
                 </entity-one>
                 <!-- Refijar PKs por si acaso -->
-                <set field="parameters.invoiceId"        from-field="line.invoiceId"/>
+                <set field="parameters.invoiceId" from-field="line.invoiceId"/>
                 <set field="parameters.invoiceLineSeqId" from-field="line.invoiceLineSeqId"/>
             </actions>
             <widgets>
